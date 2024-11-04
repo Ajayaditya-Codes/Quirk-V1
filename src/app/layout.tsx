@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { DM_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import { dark, neobrutalism } from "@clerk/themes";
+import { dark } from "@clerk/themes";
+
+const font = DM_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Quirk",
@@ -15,6 +18,13 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider
+      afterSignOutUrl={process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_OUT_URL}
+      signInFallbackRedirectUrl={
+        process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL
+      }
+      signUpFallbackRedirectUrl={
+        process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL
+      }
       appearance={{
         baseTheme: dark,
         variables: {
@@ -34,7 +44,9 @@ export default function RootLayout({
       }}
     >
       <html lang="en">
-        <body className="antialiased bg-black text-white">{children}</body>
+        <body className={"antialiased bg-black text-white" + font.className}>
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   );

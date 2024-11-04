@@ -7,7 +7,7 @@ type Props = {};
 const Navbar = async (props: Props) => {
   return (
     <header className="fixed right-0 left-0 top-0 p-7 bg-black  z-[100] flex items-center justify-between">
-      <aside className="flex items-center gap-[2px]">
+      <aside className="flex items-center gap-[2px] text-white">
         <p className="text-4xl font-bold -mr-1">Qu</p>
         <Image
           src="/flash.png"

@@ -1,6 +1,10 @@
+"use server";
+
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
+import { db } from "@/db/drizzle";
+import { Users } from "@/db/schema";
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
@@ -25,16 +29,13 @@ export async function POST(req: Request) {
     });
   }
 
-  // Get the body
   const payload = await req.json();
   const body = JSON.stringify(payload);
 
-  // Create a new Svix instance with your secret.
   const wh = new Webhook(WEBHOOK_SECRET);
 
   let evt: WebhookEvent;
 
-  // Verify the payload with the headers
   try {
     evt = wh.verify(body, {
       "svix-id": svix_id,
@@ -48,10 +49,20 @@ export async function POST(req: Request) {
     });
   }
 
-  const { id } = evt.data;
-  const eventType = evt.type;
-  console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
-  console.log("Webhook body:", body);
+  const addUser = async (Clerk_ID: string, Username: string, Email: string) => {
+    await db.insert(Users).values({
+      Clerk_ID: Clerk_ID,
+      Username: Username,
+      Email: Email,
+      Credits: 20,
+    });
+  };
+
+  addUser(
+    payload.data.id,
+    payload.data.username,
+    payload.data.email_addresses[0].email_address
+  );
 
   return new Response("", { status: 200 });
 }
