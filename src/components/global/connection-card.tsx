@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Card,
@@ -6,15 +7,59 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 type Props = {
   icon: React.ReactNode;
-  title: String;
-  description: String;
-  connected: Boolean;
+  title: string;
+  description: string;
+  connected: boolean;
+  allowDisconnect: boolean;
+  connectionLink?: string;
+  disconnectUrl: string;
 };
 
-const ConnectionCard = ({ description, icon, title, connected }: Props) => {
+const ConnectionCard = ({
+  description,
+  icon,
+  title,
+  connected,
+  allowDisconnect,
+  connectionLink,
+  disconnectUrl,
+}: Props) => {
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleDisconnect = async (title: string) => {
+    let err = false;
+    try {
+      const response: Response = await fetch(disconnectUrl, {
+        method: "POST",
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to disconnect");
+      }
+
+      const data = await response.json();
+    } catch (error) {
+      err = true;
+    } finally {
+      router.refresh();
+      if (err) {
+        toast({
+          variant: "destructive",
+          title: `There was some error disconnecting ${title}. Try Again Later.`,
+        });
+      } else {
+        toast({
+          title: `${title} Disconnected Successfully`,
+        });
+      }
+    }
+  };
   return (
     <Card className="flex w-full items-end bg-black text-white justify-between">
       <CardHeader className="flex flex-col gap-4">
@@ -24,18 +69,29 @@ const ConnectionCard = ({ description, icon, title, connected }: Props) => {
           <CardDescription>{description}</CardDescription>
         </div>
       </CardHeader>
-      <div className="flex flex-col gap-2 p-4">
+      <div className="flex flex-row gap-2 space-x-3 p-4">
+        <button
+          disabled={!allowDisconnect || !connected}
+          onClick={() => handleDisconnect(title)}
+          className={
+            !allowDisconnect || !connected
+              ? "rounded-lg bg-red-950 p-2 text-neutral-500 font-bold text-primary-foreground"
+              : "rounded-lg bg-red-800 p-2 font-bold text-primary-foreground"
+          }
+        >
+          Disconnect
+        </button>
         {connected ? (
           <button
             disabled
-            className=" rounded-lg bg-neutral-900 p-2 font-bold text-primary-foreground"
+            className=" rounded-lg bg-slate-900 text-neutral-500  p-2 font-bold text-primary-foreground w-26 text-center"
           >
             Connected
           </button>
         ) : (
           <Link
-            href="#"
-            className=" rounded-lg bg-neutral-900 p-2 font-bold text-primary-foreground"
+            href={connectionLink ? connectionLink : "#"}
+            className=" rounded-lg bg-slate-800 p-2 font-bold text-primary-foreground w-26 text-center"
           >
             Connect
           </Link>

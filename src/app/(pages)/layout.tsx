@@ -8,10 +8,31 @@ import {
 } from "@tabler/icons-react";
 import DashboardNavbar from "@/components/global/dashboard-navbar";
 import { SignOutButton } from "@/components/global/signout";
+import { db } from "@/db/drizzle";
+import { Users } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { auth } from "@clerk/nextjs/server";
+import BeatLoader from "react-spinners/BeatLoader";
 
 type Props = { children: React.ReactNode };
 
-const Layout = (props: Props) => {
+const Layout = async (props: Props) => {
+  const { userId } = await auth();
+  let userDetails = null;
+  try {
+    const result =
+      userId &&
+      (await db
+        .select()
+        .from(Users)
+        .where(eq(Users.ClerkID, userId))
+        .execute());
+
+    userDetails = result && result.length > 0 ? result[0] : null;
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+  }
+
   const links = [
     {
       title: "Dashboard",
@@ -40,10 +61,20 @@ const Layout = (props: Props) => {
       href: "#",
     },
   ];
+
+  if (userDetails === null) {
+    return (
+      <div className="h-screen overflow-scroll w-full bg-black bg-dot-white/[0.2]  relative flex-col flex p-7 text-white items-center ">
+        <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-black [mask-image:radial-gradient(ellipse_at_center,transparent_85%,black)]"></div>
+        <BeatLoader />
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen overflow-scroll w-full bg-black bg-dot-white/[0.2]  relative flex-col flex p-7 text-white items-center ">
       <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-black [mask-image:radial-gradient(ellipse_at_center,transparent_85%,black)]"></div>
-      <DashboardNavbar />
+      <DashboardNavbar credits={userDetails.Credits} />
       <FloatingDock desktopClassName="fixed bottom-0 mb-5 " items={links} />
       <div className="w-full mt-7">{props.children}</div>
     </div>

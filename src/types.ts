@@ -3,4 +3,6 @@ export type UserType = {
   Username: string;
   Email: string;
   Credits: number;
+  SlackAccessToken: string;
+  AsanaAccessToken: string;
 };

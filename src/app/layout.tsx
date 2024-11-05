@@ -3,6 +3,7 @@ import "./globals.css";
 import { DM_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import { Toaster } from "@/components/ui/toaster";
 
 const font = DM_Sans({ subsets: ["latin"] });
 
@@ -46,6 +47,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={"antialiased bg-black text-white" + font.className}>
           {children}
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

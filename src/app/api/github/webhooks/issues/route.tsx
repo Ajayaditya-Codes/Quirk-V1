@@ -27,10 +27,11 @@ export async function POST(req: Request) {
     );
   }
 
-  const { repo, workflow } = await req.json();
-  if (!repo || !workflow) {
+  // Parse the request body to get the repository name
+  const { repo } = await req.json();
+  if (!repo) {
     return NextResponse.json(
-      { message: "Repository name and Workflow name are required" },
+      { message: "Repository name is required" },
       { status: 400 }
     );
   }
@@ -45,11 +46,11 @@ export async function POST(req: Request) {
     const response = await octokit.request("POST /repos/{owner}/{repo}/hooks", {
       owner: owner || "",
       repo: repo,
-      name: workflow,
+      name: "web",
       active: true,
       events: ["issues"],
       config: {
-        url: " https://patient-husky-uniquely.ngrok-free.app/api/github/handler",
+        url: " https://patient-husky-uniquely.ngrok-free.app/github/test",
         content_type: "json",
         insecure_ssl: "0",
       },

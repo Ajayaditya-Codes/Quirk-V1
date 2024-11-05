@@ -1,0 +1,76 @@
+{
+  "id": "8d99020e-69c7-433d-b70e-352a01d78303",
+  "prevId": "73eee640-d83c-4928-833f-5f8c3f682a1e",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.Users": {
+      "name": "Users",
+      "schema": "",
+      "columns": {
+        "ClerkID": {
+          "name": "ClerkID",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Username": {
+          "name": "Username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Email": {
+          "name": "Email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Credits": {
+          "name": "Credits",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "SlackAccessToken": {
+          "name": "SlackAccessToken",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "AsanaRefreshToken": {
+          "name": "AsanaRefreshToken",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Users_Email_unique": {
+          "name": "Users_Email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
