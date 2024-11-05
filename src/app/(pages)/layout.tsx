@@ -37,7 +37,7 @@ const Layout = (props: Props) => {
     {
       title: "Logout",
       icon: <SignOutButton />,
-      href: "/",
+      href: "#",
     },
   ];
   return (

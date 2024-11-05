@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen w-full bg-black  bg-dot-white/[0.5] relative flex flex-col items-center justify-center">
+    <div className="min-h-screen w-full bg-black text-white bg-dot-white/[0.5] relative flex flex-col items-center justify-center">
       <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-black [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
       <Navbar />
       <div className="w-screen overflow-hidden flex justify-center flex-col items-center px-4">

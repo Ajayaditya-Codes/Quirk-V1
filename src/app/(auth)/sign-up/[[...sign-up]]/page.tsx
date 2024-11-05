@@ -3,7 +3,7 @@ import { CircleCheck } from "lucide-react";
 
 export default function Page() {
   return (
-    <div className="h-screen w-full bg-black  bg-dot-white/[0.5] relative flex flex-row justify-around items-center ">
+    <div className="h-screen w-full bg-black text-white  bg-dot-white/[0.5] relative flex flex-row justify-around items-center ">
       <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-black [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
       <div className="flex basis-1/2 justify-center">
         <SignUp />
