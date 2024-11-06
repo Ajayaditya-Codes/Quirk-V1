@@ -27,7 +27,7 @@ export default async function Page() {
   }
 
   return (
-    <div className="flex flex-col w-full overflow-scroll p-7">
+    <div className="flex flex-col w-full overflow-scroll p-5">
       <header>
         <h1 className="text-4xl font-bold w-full mb-10">Connections</h1>
       </header>

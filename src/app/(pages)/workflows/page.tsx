@@ -19,13 +19,12 @@ export default async function Page() {
         .execute());
 
     userDetails = result && result.length > 0 ? result[0] : null;
-    console.log("User details:", userDetails);
   } catch (error) {
     console.error("Error fetching user details:", error);
   }
 
   return (
-    <div className="flex flex-col w-full overflow-scroll p-7">
+    <div className="flex flex-col w-full overflow-scroll p-5">
       <header className="flex flex-row justify-between items-center mb-10">
         <h1 className="text-4xl font-bold ">Worklfows</h1>
         <WorkflowButton bgDisabled={false} />

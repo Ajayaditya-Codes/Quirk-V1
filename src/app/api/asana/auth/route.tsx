@@ -36,8 +36,6 @@ export async function GET(req: NextRequest) {
     });
 
     const data = await response.json();
-    console.log("access", data.access_token);
-    console.log("refresh", data.refresh_token);
 
     if (!data.access_token) {
       return NextResponse.json(
@@ -67,7 +65,8 @@ async function updateAsanaAccessToken(asanaAccessToken: string) {
         .set({
           AsanaRefreshToken: asanaAccessToken,
         })
-        .where(eq(Users.ClerkID, userId)).execute());
+        .where(eq(Users.ClerkID, userId))
+        .execute());
   } catch (error) {
     console.error("Error updating Asana access token:", error);
     throw new Error("Failed to update Asana access token");

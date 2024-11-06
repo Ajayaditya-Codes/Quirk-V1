@@ -28,8 +28,8 @@ export default function WorkflowButton({ bgDisabled }: Props) {
         router.refresh();
       } else if (result.error === "Maximum number of workflows reached") {
         toast({
-          title: "Workflow limit reached. ",
-          description: "You can only have 3 workflows in Hobby Plan.",
+          title: "Workflow Limit Reached. ",
+          description: "You can only have 3 Workflows in Hobby Plan.",
           variant: "destructive",
         });
       } else {
@@ -57,8 +57,10 @@ export default function WorkflowButton({ bgDisabled }: Props) {
   };
   return (
     <button
-      className={`w-12 h-12 rounded-lg flex justify-center items-center  ${
-        bgDisabled ? "bg-transparent" : "bg-neutral-800"
+      className={`w-12 h-12 rounded-lg  flex justify-center items-center  ${
+        bgDisabled
+          ? "bg-transparent"
+          : "bg-neutral-800 border-neutral-600 border-2"
       }`}
     >
       <IconCodePlus onClick={async () => handle()} />

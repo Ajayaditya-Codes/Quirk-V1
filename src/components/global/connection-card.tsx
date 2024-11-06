@@ -75,8 +75,8 @@ const ConnectionCard = ({
           onClick={() => handleDisconnect(title)}
           className={
             !allowDisconnect || !connected
-              ? "rounded-lg bg-neutral-900 p-2 text-gray-400 font-bold text-primary-foreground"
-              : "rounded-lg bg-neutral-900 p-2 font-bold text-primary-foreground"
+              ? "rounded-lg bg-neutral-900 p-2 text-gray-400 border border-neutral-700 font-bold text-primary-foreground"
+              : "rounded-lg bg-neutral-900 p-2 border border-red-800 font-bold text-primary-foreground"
           }
         >
           Disconnect
@@ -84,14 +84,14 @@ const ConnectionCard = ({
         {connected ? (
           <button
             disabled
-            className=" rounded-lg bg-neutral-900 text-gray-400  p-2 font-bold text-primary-foreground w-26 text-center"
+            className=" rounded-lg bg-neutral-900 text-gray-400  border border-neutral-700 p-2 font-bold text-primary-foreground w-26 text-center"
           >
             Connected
           </button>
         ) : (
           <Link
             href={connectionLink ? connectionLink : "#"}
-            className=" rounded-lg bg-neutral-800 p-2 font-bold text-primary-foreground w-26 text-center"
+            className=" rounded-lg bg-neutral-900 p-2 font-bold border border-white text-primary-foreground w-26 text-center"
           >
             Connect
           </Link>

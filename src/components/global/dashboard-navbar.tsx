@@ -15,7 +15,7 @@ type Props = {
 
 const DashboardNavbar = async ({ credits }: Props) => {
   return (
-    <header className="fixed top-0 right-0 p-5 left-0 w-full mb-5 bg-black  z-40 flex items-center justify-between">
+    <header className="fixed top-0 right-0 p-5 left-0 w-full mb-5 bg-black h-24 z-40 flex items-center justify-between">
       <aside className="flex items-center gap-[2px]">
         <p className="text-4xl font-bold -mr-1">Qu</p>
         <Image

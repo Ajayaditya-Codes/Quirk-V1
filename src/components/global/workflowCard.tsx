@@ -28,7 +28,7 @@ export default function WorkflowCard({ name }: Props) {
         </div>
       </CardHeader>
       <div className="flex flex-row items-center gap-2 p-4 ">
-        <Link href={`/workflows/editor/${name}`}>
+        <Link href={`/editor/${name}`}>
           {" "}
           <button className="bg-neutral-900 p-2 rounded-lg">
             Edit Workflow

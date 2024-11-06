@@ -81,7 +81,7 @@ export default function Home() {
                 up {"you'll"} never leave us after this!
                 <ul className="my-4 flex flex-col gap-2">
                   <li className="flex items-center gap-2">
-                    <CheckIcon />3 Free automations
+                    <CheckIcon />3 Free Workflows
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckIcon />
