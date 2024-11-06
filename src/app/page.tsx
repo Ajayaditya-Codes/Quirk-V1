@@ -100,7 +100,7 @@ export default function Home() {
                 >
                   Try now →
                 </CardItem>
-                <Link href="/dashboard">
+                <Link href="/workflows">
                   <CardItem
                     translateZ={20}
                     as="button"

@@ -67,7 +67,7 @@ async function updateAsanaAccessToken(asanaAccessToken: string) {
         .set({
           AsanaRefreshToken: asanaAccessToken,
         })
-        .where(eq(Users.ClerkID, userId)));
+        .where(eq(Users.ClerkID, userId)).execute());
   } catch (error) {
     console.error("Error updating Asana access token:", error);
     throw new Error("Failed to update Asana access token");

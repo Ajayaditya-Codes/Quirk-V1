@@ -19,7 +19,6 @@ export async function POST(req: NextRequest) {
     .from(Users)
     .where(eq(Users.ClerkID, userId))
     .execute();
-
   if (!user.length || !user[0].AsanaRefreshToken) {
     return NextResponse.json(
       { error: "No Asana refresh token found" },
@@ -55,7 +54,8 @@ export async function POST(req: NextRequest) {
     await db
       .update(Users)
       .set({ AsanaRefreshToken: null })
-      .where(eq(Users.ClerkID, userId));
+      .where(eq(Users.ClerkID, userId))
+      .execute();
 
     return NextResponse.json({ message: "Asana access revoked successfully" });
   } catch (error) {

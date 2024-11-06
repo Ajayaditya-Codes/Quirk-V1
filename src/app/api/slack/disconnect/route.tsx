@@ -48,7 +48,8 @@ export async function POST(req: NextRequest) {
     await db
       .update(Users)
       .set({ SlackAccessToken: null }) // or false based on your database design
-      .where(eq(Users.ClerkID, userId));
+      .where(eq(Users.ClerkID, userId))
+      .execute();
 
     return NextResponse.json({ message: "Slack access revoked successfully" });
   } catch (error) {

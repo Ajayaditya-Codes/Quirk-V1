@@ -47,12 +47,15 @@ export async function POST(req: Request) {
   }
 
   const addUser = async (ClerkID: string, Username: string, Email: string) => {
-    await db.insert(Users).values({
-      ClerkID: ClerkID,
-      Username: Username,
-      Email: Email,
-      Credits: 20,
-    });
+    await db
+      .insert(Users)
+      .values({
+        ClerkID: ClerkID,
+        Username: Username,
+        Email: Email,
+        Credits: 20,
+      })
+      .execute();
   };
 
   addUser(

@@ -1,16 +1,54 @@
 {
-  "id": "acda4994-cf3e-4489-a528-c4465be32de9",
-  "prevId": "10d9dc3f-fd6c-434f-bc07-13bb97f10e3e",
+  "id": "301b727c-e15b-425a-921a-b86c9fc57f37",
+  "prevId": "922dacbe-655f-42d7-987b-8784f0761b91",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.Logs": {
+      "name": "Logs",
+      "schema": "",
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "LogMessage": {
+          "name": "LogMessage",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "WorkflowName": {
+          "name": "WorkflowName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Success": {
+          "name": "Success",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.Users": {
       "name": "Users",
       "schema": "",
       "columns": {
-        "Clerk_ID": {
-          "name": "Clerk_ID",
-          "type": "integer",
+        "ClerkID": {
+          "name": "ClerkID",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -25,6 +63,79 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "Credits": {
+          "name": "Credits",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "SlackAccessToken": {
+          "name": "SlackAccessToken",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "AsanaRefreshToken": {
+          "name": "AsanaRefreshToken",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Workflows": {
+          "name": "Workflows",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Users_Email_unique": {
+          "name": "Users_Email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Workflows": {
+      "name": "Workflows",
+      "schema": "",
+      "columns": {
+        "WorkflowName": {
+          "name": "WorkflowName",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "GitHubNode": {
+          "name": "GitHubNode",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "SlackNodes": {
+          "name": "SlackNodes",
+          "type": "jsonb[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::jsonb[]"
+        },
+        "AsanaNode": {
+          "name": "AsanaNode",
+          "type": "jsonb[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::jsonb[]"
         }
       },
       "indexes": {},

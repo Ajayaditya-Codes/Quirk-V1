@@ -18,7 +18,6 @@ export async function GET(req: NextRequest) {
     .from(Users)
     .where(eq(Users.ClerkID, userId))
     .execute();
-
   if (!user.length || !user[0].AsanaRefreshToken) {
     return NextResponse.json(
       { error: "No Asana refresh token found" },
@@ -95,7 +94,6 @@ export async function GET(req: NextRequest) {
     });
 
     const workspaceProjects = await Promise.all(workspaceProjectsPromises);
-
     return NextResponse.json({
       message: "Successfully retrieved workspaces and projects",
       data: workspaceProjects,

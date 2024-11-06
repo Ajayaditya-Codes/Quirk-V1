@@ -1,28 +1,136 @@
 {
-  "id": "10d9dc3f-fd6c-434f-bc07-13bb97f10e3e",
+  "id": "922dacbe-655f-42d7-987b-8784f0761b91",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.todo": {
-      "name": "todo",
+    "public.Logs": {
+      "name": "Logs",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
         },
-        "username": {
-          "name": "username",
+        "LogMessage": {
+          "name": "LogMessage",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "email": {
-          "name": "email",
+        "WorkflowName": {
+          "name": "WorkflowName",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Success": {
+          "name": "Success",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Users": {
+      "name": "Users",
+      "schema": "",
+      "columns": {
+        "ClerkID": {
+          "name": "ClerkID",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Username": {
+          "name": "Username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Email": {
+          "name": "Email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Credits": {
+          "name": "Credits",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "SlackAccessToken": {
+          "name": "SlackAccessToken",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "AsanaRefreshToken": {
+          "name": "AsanaRefreshToken",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Workflows": {
+          "name": "Workflows",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Users_Email_unique": {
+          "name": "Users_Email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Workflows": {
+      "name": "Workflows",
+      "schema": "",
+      "columns": {
+        "WorkflowName": {
+          "name": "WorkflowName",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "GitHubNode": {
+          "name": "GitHubNode",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "SlackNodes": {
+          "name": "SlackNodes",
+          "type": "jsonb[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "AsanaNode": {
+          "name": "AsanaNode",
+          "type": "jsonb[]",
           "primaryKey": false,
           "notNull": true
         }

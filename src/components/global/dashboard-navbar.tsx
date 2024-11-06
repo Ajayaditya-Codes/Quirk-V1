@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 
 type Props = {
-  credits: number;
+  credits?: number | null;
 };
 
 const DashboardNavbar = async ({ credits }: Props) => {
@@ -29,7 +29,7 @@ const DashboardNavbar = async ({ credits }: Props) => {
       </aside>
       <aside className="hidden md:flex items-center flex-row gap-4">
         <p className="text-lg font-bold text-neutral-300">
-          Credits: {credits}/20
+          {credits === null ? "Loading..." : `Credits: ${credits}/20`}
         </p>
         <TooltipProvider>
           <Tooltip>

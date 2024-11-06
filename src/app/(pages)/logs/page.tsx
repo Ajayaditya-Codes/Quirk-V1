@@ -1,0 +1,82 @@
+import { db } from "@/db/drizzle";
+import { Logs } from "@/db/schema";
+import { auth } from "@clerk/nextjs/server";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  IconCircle,
+  IconCircleCheck,
+  IconExclamationCircle,
+} from "@tabler/icons-react";
+
+export default async function Page() {
+  const { userId } = await auth();
+  let logs = null;
+  try {
+    const result = userId && (await db.select().from(Logs).execute());
+
+    logs = result;
+  } catch (error) {
+    console.error("Error fetching logs:", error);
+  }
+
+  return (
+    <div className="flex flex-col w-full overflow-scroll p-7">
+      <header>
+        <h1 className="text-4xl font-bold w-full mb-10">
+          Workflow Activity Logs
+        </h1>
+      </header>
+      <main>
+        <Table className="text-lg">
+          <TableCaption>A list of Your Activity Logs.</TableCaption>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead>Timestamp</TableHead>
+              <TableHead>Workflow</TableHead>
+              <TableHead>Message</TableHead>
+              <TableHead className="text-right">Success</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {logs &&
+              logs.map((log, idx) => {
+                return (
+                  <TableRow
+                    className="hover:bg-transparent font-medium"
+                    key={idx}
+                  >
+                    <TableCell>{log.createdAt.toTimeString()}</TableCell>
+                    <TableCell>{log.WorkflowName}</TableCell>
+                    <TableCell>{log.LogMessage}</TableCell>
+                    {log.Success ? (
+                      <TableCell className="flex justify-end">
+                        <div className="flex flex-row bg-neutral-900 text-base w-fit h-fit items-center  space-x-2 rounded-xl p-1 px-2">
+                          <IconCircleCheck className="text-green-500" />
+                          <p>Succeeded</p>
+                        </div>
+                      </TableCell>
+                    ) : (
+                      <TableCell className="flex justify-end">
+                        <div className="flex flex-row bg-neutral-900 text-base w-fit h-fit items-center  space-x-2 rounded-xl p-1 px-2">
+                          <IconExclamationCircle className="text-red-500" />
+                          <p>Failed</p>
+                        </div>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
+      </main>
+    </div>
+  );
+}

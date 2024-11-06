@@ -5,57 +5,15 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1730701332964,
-      "tag": "0000_dashing_dragon_man",
+      "when": 1730878379844,
+      "tag": "0000_rare_maginty",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1730701529220,
-      "tag": "0001_lethal_mordo",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1730702702105,
-      "tag": "0002_even_exodus",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1730704217482,
-      "tag": "0003_curious_shriek",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1730716216602,
-      "tag": "0004_aromatic_the_executioner",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1730782655519,
-      "tag": "0005_tearful_arachne",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1730807622208,
-      "tag": "0006_flaky_lethal_legion",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1730808752076,
-      "tag": "0007_workable_shadow_king",
+      "when": 1730878503373,
+      "tag": "0001_good_tusk",
       "breakpoints": true
     }
   ]

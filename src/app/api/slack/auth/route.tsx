@@ -61,7 +61,8 @@ async function updateSlackAccessToken(slackAccessToken: string) {
         .set({
           SlackAccessToken: slackAccessToken,
         })
-        .where(eq(Users.ClerkID, userId)));
+        .where(eq(Users.ClerkID, userId))
+        .execute());
   } catch (error) {
     console.error("Error updating Slack access token:", error);
     throw new Error("Failed to update Slack access token");

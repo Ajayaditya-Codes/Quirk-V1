@@ -21,7 +21,7 @@ type Props = {};
 
 const MenuOptions = (props: Props) => {
   const menuOptions = [
-    { name: "Dashboard", href: "/dashboard" },
+    { name: "Dashboard", href: "/workflows" },
     { name: "Settings", href: "/settings" },
     { name: "Connections", href: "/connections" },
     { name: "Logs", href: "/logs" },
