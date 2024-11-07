@@ -2,6 +2,7 @@ import { Handle, Position, type Node, type NodeProps } from "@xyflow/react";
 import WorkflowButton from "../../_components/workflowButton";
 import { IconBrandGithub } from "@tabler/icons-react";
 import React from "react";
+import { useMenuStore } from "../menuStateStore";
 
 type GitHubNodeData = {
   repoName: string;
@@ -13,9 +14,14 @@ type GitHubNodeProps = NodeProps<GitHubNode>;
 
 const GitHubNode: React.FC<GitHubNodeProps> = ({ data }) => {
   const { repoName, listenerType } = data;
+  const { menuState, setMenuState, nodeState, setNodeState } = useMenuStore();
 
   const handleWorkflow = () => {
-    console.log(`Listening to ${listenerType} events for ${repoName}`);
+    setMenuState("github");
+    setNodeState({
+      repo: repoName || "",
+      listener: listenerType || "issues",
+    });
   };
 
   return (

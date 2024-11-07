@@ -2,6 +2,7 @@ import { Handle, Position, type Node, type NodeProps } from "@xyflow/react";
 import WorkflowButton from "../../_components/workflowButton";
 import { IconBrandSlack } from "@tabler/icons-react";
 import React from "react";
+import { useMenuStore } from "../menuStateStore";
 
 // Define the type for SlackNode data
 type SlackNodeData = {
@@ -15,11 +16,14 @@ type SlackNodeProps = NodeProps<SlackNode>;
 
 const SlackNode: React.FC<SlackNodeProps> = ({ data }) => {
   const { channel, text } = data;
+  const { menuState, setMenuState, nodeState, setNodeState } = useMenuStore();
 
-  // Handler for WorkflowButton
   const handleWorkflow = () => {
-    console.log(`Sending message to Slack channel: ${channel}`);
-    console.log(`Message: ${text}`);
+    setMenuState("slack");
+    setNodeState({
+      channel: channel || "",
+      message: text || "",
+    });
   };
 
   return (

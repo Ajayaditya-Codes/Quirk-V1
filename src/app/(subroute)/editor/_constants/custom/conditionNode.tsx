@@ -2,6 +2,7 @@ import { Handle, Position, type Node, type NodeProps } from "@xyflow/react";
 import WorkflowButton from "../../_components/workflowButton";
 import React from "react";
 import { GitBranch } from "lucide-react";
+import { useMenuStore } from "../menuStateStore";
 
 type ConditionNodeData = {
   variable: string;
@@ -15,11 +16,16 @@ type ConditionNodeProps = NodeProps<ConditionNode>;
 
 const ConditionNode: React.FC<ConditionNodeProps> = ({ data }) => {
   const { variable, condition, value } = data;
+  const { menuState, setMenuState, nodeState, setNodeState } = useMenuStore();
 
   // Handler for WorkflowButton
   const handleWorkflow = () => {
-    console.log("Condition Node Workflow");
-    console.log(variable, condition, value);
+    setMenuState("condition");
+    setNodeState({
+      variable: variable || "",
+      condition: condition || "==",
+      value: value || "",
+    });
   };
 
   return (

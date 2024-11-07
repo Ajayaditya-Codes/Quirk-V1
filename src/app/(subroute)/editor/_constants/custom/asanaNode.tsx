@@ -2,6 +2,7 @@ import { Handle, Position, type Node, type NodeProps } from "@xyflow/react";
 import WorkflowButton from "../../_components/workflowButton";
 import { IconBrandAsana } from "@tabler/icons-react";
 import React from "react";
+import { useMenuStore } from "../menuStateStore";
 
 // Define the type for AsanaNode data
 type AsanaNodeData = {
@@ -10,18 +11,20 @@ type AsanaNodeData = {
   taskNotes: string;
 };
 
-// Define the AsanaNode type
 type AsanaNode = Node<AsanaNodeData, "asana">;
 type AsanaNodeProps = NodeProps<AsanaNode>;
 
 const AsanaNode: React.FC<AsanaNodeProps> = ({ data }) => {
   const { project, taskName, taskNotes } = data;
+  const { menuState, setMenuState, nodeState, setNodeState } = useMenuStore();
 
-  // Handler for WorkflowButton
   const handleWorkflow = () => {
-    console.log(`Creating task in Asana project: ${project}`);
-    console.log(`Task: ${taskName}`);
-    console.log(`Notes: ${taskNotes}`);
+    setMenuState("asana");
+    setNodeState({
+      projectId: project || "",
+      taskName: taskName || "",
+      taskNotes: taskNotes || "",
+    });
   };
 
   return (
