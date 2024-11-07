@@ -50,7 +50,8 @@ export default function Editor() {
 
   return (
     <div className="border-8 w-[70vw] h-full border-neutral-800 bg-black bg-opacity-50 rounded-md">
-      <ReactFlow
+      <ReactFlow //@ts-ignore
+        fitView
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
@@ -60,7 +61,7 @@ export default function Editor() {
         defaultEdgeOptions={edgeOptions}
         colorMode="dark"
         zoomOnPinch
-        fitView
+        snapToGrid
       >
         <Background //@ts-ignore
           variant="dots"

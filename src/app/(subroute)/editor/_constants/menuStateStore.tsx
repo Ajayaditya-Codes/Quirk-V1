@@ -7,7 +7,10 @@ type GithubState = {
   listener: "issues" | "push";
 };
 type AsanaState = {
-  projectId: string;
+  project: {
+    id: string;
+    name: string;
+  };
   taskName: string;
   taskNotes: string;
 };
@@ -29,11 +32,27 @@ interface MenuStore {
   setMenuState: (state: MenuState) => void;
   nodeState: NodeState;
   setNodeState: (state: NodeState) => void;
+  repos: string[];
+  setRepos: (repos: string[]) => void;
+  channels: string[];
+  setChannels: (channels: string[]) => void;
+  projects: { id: string; name: string }[];
+  setProjects: (projects: { id: string; name: string }[]) => void;
+  id: string;
+  setId: (id: string) => void;
 }
 
 export const useMenuStore = create<MenuStore>((set) => ({
+  id: "",
+  setId: (id: string) => set({ id }),
   menuState: "menu",
   setMenuState: (state: MenuState) => set({ menuState: state }),
   nodeState: null,
   setNodeState: (state: NodeState) => set({ nodeState: state }),
+  repos: [],
+  setRepos: (repos) => set({ repos }),
+  channels: [],
+  setChannels: (channels) => set({ channels }),
+  projects: [],
+  setProjects: (projects) => set({ projects }),
 }));

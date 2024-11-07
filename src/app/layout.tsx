@@ -45,7 +45,7 @@ export default function RootLayout({
       }}
     >
       <html lang="en">
-        <body className={"antialiased bg-black text-white" + font.className}>
+        <body className={"antialiased bg-black text-white " + font.className}>
           {children}
           <Toaster />
         </body>

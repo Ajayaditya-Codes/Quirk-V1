@@ -6,7 +6,7 @@ export async function GET() {
   const { userId } = await auth();
 
   if (!userId) {
-    return NextResponse.json({ message: "User not found" });
+    return NextResponse.json({ message: "User not found" }, { status: 401 });
   }
 
   const provider = "oauth_github";

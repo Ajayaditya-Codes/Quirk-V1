@@ -10,7 +10,6 @@ import SlackNode from "./custom/slackNode";
 import ConditionNode from "./custom/conditionNode";
 import { create } from "zustand";
 
-// Define types
 type FlowState = {
   nodes: Node[];
   edges: Edge[];
@@ -41,56 +40,10 @@ export const useFlowStore = create<FlowState>((set) => ({
       id: "github-1",
       type: "github",
       data: {
-        repoName: "openai/xyflow",
+        repoName: "",
         listenerType: "issues",
       },
       position: { x: 0, y: 0 }, // Position of the GitHub node
-    },
-    {
-      id: "slack-1",
-      type: "slack",
-      data: {
-        channel: "#general",
-        text: "Hello, everyone! This is a test message from React Flow.",
-      },
-      position: { x: -200, y: -200 }, // Position of the Slack node
-    },
-    {
-      id: "slack-2",
-      type: "slack",
-      data: {
-        channel: "#development",
-        text: "React Flow integration is awesome! #workflow",
-      },
-      position: { x: 200, y: 200 }, // Position of the Slack node
-    },
-    {
-      id: "asana-1",
-      type: "asana",
-      data: {
-        project: "Marketing Campaign",
-        taskName: "Design New Logo",
-        taskNotes:
-          "Create a new logo design for the fall campaign. Use the new brand colors and incorporate the latest trends.",
-      },
-      position: { x: -400, y: -450 }, // Position of the Asana node
-    },
-    {
-      id: "asana-2",
-      type: "asana",
-      data: {
-        project: "Product Launch",
-        taskName: "Write Blog Post",
-        taskNotes:
-          "Write an engaging blog post about the upcoming product launch. Include the key features and benefits.",
-      },
-      position: { x: 400, y: 400 }, // Position of the Asana node
-    },
-    {
-      id: "condition-1",
-      type: "condition",
-      data: { variable: "issue", condition: "==", value: "Good First Issue" },
-      position: { x: 600, y: 600 }, // Position of the Asana node
     },
   ],
   edges: [],
@@ -134,12 +87,12 @@ export const useFlowStore = create<FlowState>((set) => ({
       id: `github-${Math.random().toString(36).slice(2, 9)}`,
       type: "github",
       data: {
-        repoName: "example/repo",
-        listenerType: "issues",
+        repoName: "",
+        listenerType: "",
       },
       position: {
-        x: Math.floor(Math.random() * 2000) - 1000, // Random x between -1000 and 1000
-        y: Math.floor(Math.random() * 2000) - 1000, // Random y between -1000 and 1000
+        x: Math.floor(Math.random() * 600) - 300, // Random x between -1000 and 1000
+        y: Math.floor(Math.random() * 600) - 300, // Random y between -1000 and 1000
       },
     };
     set((state) => ({
@@ -152,12 +105,12 @@ export const useFlowStore = create<FlowState>((set) => ({
       id: `slack-${Math.random().toString(36).slice(2, 9)}`,
       type: "slack",
       data: {
-        channel: "general",
-        text: "Test Slack message.",
+        channel: "",
+        message: "",
       },
       position: {
-        x: Math.floor(Math.random() * 2000) - 1000,
-        y: Math.floor(Math.random() * 2000) - 1000,
+        x: Math.floor(Math.random() * 600) - 300,
+        y: Math.floor(Math.random() * 600) - 300,
       },
     };
     set((state) => ({
@@ -170,13 +123,13 @@ export const useFlowStore = create<FlowState>((set) => ({
       id: `asana-${Math.random().toString(36).slice(2, 9)}`,
       type: "asana",
       data: {
-        project: "Example Project",
-        taskName: "Example Task",
-        taskNotes: "This is an example task in Asana.",
+        project: "",
+        taskName: "",
+        taskNotes: "",
       },
       position: {
-        x: Math.floor(Math.random() * 2000) - 1000,
-        y: Math.floor(Math.random() * 2000) - 1000,
+        x: Math.floor(Math.random() * 600) - 300,
+        y: Math.floor(Math.random() * 600) - 300,
       },
     };
     set((state) => ({
@@ -189,13 +142,13 @@ export const useFlowStore = create<FlowState>((set) => ({
       id: `condition-${Math.random().toString(36).slice(2, 9)}`,
       type: "condition",
       data: {
-        variable: "issue",
-        condition: "==",
-        value: "Good First Issue",
+        variable: "",
+        condition: "",
+        value: "",
       },
       position: {
-        x: Math.floor(Math.random() * 2000) - 1000,
-        y: Math.floor(Math.random() * 2000) - 1000,
+        x: Math.floor(Math.random() * 600) - 300,
+        y: Math.floor(Math.random() * 600) - 300,
       },
     };
     set((state) => ({

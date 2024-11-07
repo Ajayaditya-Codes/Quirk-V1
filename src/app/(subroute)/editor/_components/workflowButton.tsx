@@ -3,6 +3,7 @@
 import { IconLockAccess } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { useFlowStore } from "../_constants/reactFlowStore";
+import { useToast } from "@/hooks/use-toast";
 
 type WorkflowButtonProps = {
   icon: ReactNode;
@@ -17,13 +18,16 @@ const WorkflowButton: FC<WorkflowButtonProps> = ({
   workflowDescription,
   disabled,
 }) => {
-  const { githubHandler, slackHandler, asanaHandler, conditionHandler } =
-    useFlowStore();
+  const { slackHandler, asanaHandler, conditionHandler } = useFlowStore();
+  const { toast } = useToast();
 
   const handler = (name: string) => {
     switch (name) {
       case "GitHub":
-        githubHandler();
+        toast({
+          title: "Hooby Plan Supports only one Github Node",
+          variant: "destructive",
+        });
         break;
       case "Slack":
         slackHandler();
@@ -34,6 +38,8 @@ const WorkflowButton: FC<WorkflowButtonProps> = ({
       case "Condition":
         conditionHandler();
         break;
+      case "Trello":
+        toast({ title: "Coming Soon!" });
       default:
         break;
     }
@@ -42,7 +48,6 @@ const WorkflowButton: FC<WorkflowButtonProps> = ({
     <button
       className="bg-neutral-900 rounded-xl w-full items-center p-5 flex flex-row space-x-5 border-white border"
       onClick={() => handler(workflowName)}
-      disabled={disabled || false}
     >
       {icon}
       <div className="flex flex-col justify-start items-start">

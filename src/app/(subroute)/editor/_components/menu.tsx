@@ -1,6 +1,10 @@
 "use client";
 import { useMenuStore } from "../_constants/menuStateStore";
 import Actions from "./menus/actions";
+import AsanaMenu from "./menus/asanaMenu";
+import ConditionMenu from "./menus/conditionMenu";
+import GithubMenu from "./menus/githubMenu";
+import SlackMenu from "./menus/slackMenu";
 
 export default function Menu() {
   const { menuState, setMenuState } = useMenuStore();
@@ -8,13 +12,13 @@ export default function Menu() {
     case "menu":
       return <Actions />;
     case "github":
-      return <button onClick={() => setMenuState("menu")}>Back</button>;
+      return <GithubMenu />;
     case "asana":
-      return <button onClick={() => setMenuState("menu")}>Back</button>;
+      return <AsanaMenu />;
     case "slack":
-      return <button onClick={() => setMenuState("menu")}>Back</button>;
+      return <SlackMenu />;
     case "condition":
-      return <button onClick={() => setMenuState("menu")}>Back</button>;
+      return <ConditionMenu />;
     default:
       return <Actions />;
   }
