@@ -1,0 +1,1 @@
+ALTER TABLE "Workflows" ADD COLUMN "Published" boolean DEFAULT false NOT NULL;

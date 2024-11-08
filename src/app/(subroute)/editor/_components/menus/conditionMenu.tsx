@@ -12,11 +12,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { GithubVariables } from "../../_constants/githubVariables";
 
 // Define the ConditionNodeData type
 type ConditionNodeData = {
   variable: string;
-  condition: ">" | "<" | "==" | "!=" | ">=" | "<=";
+  condition: ">" | "<" | "==" | "!=" | ">=" | "<=" | "has" | "not has";
   value: string;
 };
 
@@ -25,7 +26,9 @@ function isConditionState(nodeState: any): nodeState is ConditionNodeData {
   return (
     nodeState &&
     typeof nodeState.variable === "string" &&
-    ["<", ">", "==", "!=", ">=", "<="].includes(nodeState.condition) &&
+    ["<", ">", "==", "!=", ">=", "<=", "has", "not has"].includes(
+      nodeState.condition
+    ) &&
     typeof nodeState.value === "string"
   );
 }
@@ -96,20 +99,29 @@ export default function ConditionMenu() {
       </div>
 
       <div className="space-y-4">
-        {/* Variable Input */}
         <div>
-          <label className="block text-sm font-medium text-neutral-400">
+          <label className="block text-md font-medium text-neutral-400">
             Variable
           </label>
-          <Input
+          <Select
             value={variable}
-            onChange={(e) => setVariable(e.target.value)}
-            className="w-full p-2 border border-neutral-700 rounded-md bg-neutral-900 text-neutral-200"
-          />
+            onValueChange={(value) => setVariable(value)}
+          >
+            <SelectTrigger className="w-full mt-1 p-2 border text-md border-neutral-700 rounded-md bg-neutral-900 text-neutral-200">
+              <SelectValue placeholder="Select Variable" />
+            </SelectTrigger>
+            <SelectContent className="bg-black text-white w-[25vw]">
+              {GithubVariables.map((variable) => (
+                <SelectItem key={variable} value={variable}>
+                  {variable}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-neutral-400">
+          <label className="block text-md font-medium text-neutral-400">
             Condition
           </label>
           <Select
@@ -118,28 +130,29 @@ export default function ConditionMenu() {
               setCondition(value as ConditionNodeData["condition"])
             }
           >
-            <SelectTrigger className="w-full mt-1 p-2 border border-neutral-700 rounded-md bg-neutral-900 text-neutral-200">
+            <SelectTrigger className="w-full mt-1 p-2 border text-md border-neutral-700 rounded-md bg-neutral-900 text-neutral-200">
               <SelectValue placeholder="Select Condition" />
             </SelectTrigger>
             <SelectContent className="bg-black text-white w-[25vw]">
-              {["<", ">", "==", "!=", ">=", "<="].map((condition) => (
-                <SelectItem key={condition} value={condition}>
-                  {condition}
-                </SelectItem>
-              ))}
+              {["<", ">", "==", "!=", ">=", "<=", "has", "not has"].map(
+                (condition) => (
+                  <SelectItem key={condition} value={condition}>
+                    {condition}
+                  </SelectItem>
+                )
+              )}
             </SelectContent>
           </Select>
         </div>
 
-        {/* Value Input */}
         <div>
-          <label className="block text-sm font-medium text-neutral-400">
+          <label className="block text-md font-medium text-neutral-400">
             Value
           </label>
           <Input
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            className="w-full p-2 border border-neutral-700 rounded-md bg-neutral-900 text-neutral-200"
+            className="w-full p-2 border text-md border-neutral-700 rounded-md bg-neutral-900 text-neutral-200"
           />
         </div>
       </div>

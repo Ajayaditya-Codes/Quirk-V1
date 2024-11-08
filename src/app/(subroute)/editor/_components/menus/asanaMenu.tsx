@@ -1,9 +1,9 @@
 "use client";
-import { IconArrowBackUpDouble } from "@tabler/icons-react";
+import { IconArrowBackUpDouble, IconInfoCircle } from "@tabler/icons-react";
 import { useMenuStore } from "../../_constants/menuStateStore";
 import { useState, useEffect } from "react";
-import { useFlowStore } from "../../_constants/reactFlowStore";
-import { toast, useToast } from "@/hooks/use-toast";
+import { useFlowStore } from "@/app/(subroute)/editor/_constants/reactFlowStore";
+import { useToast } from "@/hooks/use-toast";
 import {
   Select,
   SelectTrigger,
@@ -12,6 +12,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import VariableScrollArea from "../VariableScrollArea";
 
 // Define the AsanaNodeData type
 type AsanaNodeData = {
@@ -118,8 +120,12 @@ export default function AsanaMenu() {
     setMenuState("menu");
   };
 
+  const variableAdder = (variable: string) => {
+    setTaskNotes(taskNotes + "var::" + variable + " ");
+  };
+
   return (
-    <div className="flex-grow w-[27vw] flex flex-col p-5 justify-start space-y-5">
+    <div className="h-full w-[27vw] flex flex-col p-5 justify-start space-y-5">
       <div className="flex flex-row justify-between items-center">
         <h2 className="text-2xl font-semibold ">Asana Task</h2>
         <button
@@ -132,7 +138,7 @@ export default function AsanaMenu() {
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-neutral-400">
+          <label className="block text-md font-medium text-neutral-400">
             Select Project
           </label>
           <Select
@@ -147,7 +153,7 @@ export default function AsanaMenu() {
             }}
             value={selectedProject.name} // Use project name as value
           >
-            <SelectTrigger className="w-full mt-1 p-2 border border-neutral-700 rounded-md bg-neutral-900 text-neutral-200">
+            <SelectTrigger className="w-full  text-md mt-1 p-2 border border-neutral-700 rounded-md bg-neutral-900 text-neutral-200">
               <SelectValue placeholder="Select Project" />
             </SelectTrigger>
             <SelectContent className="bg-black text-white w-[25vw]">
@@ -161,29 +167,41 @@ export default function AsanaMenu() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-neutral-400">
+          <label className="block text-md font-medium text-neutral-400">
             Task Name
           </label>
           <Input
             value={taskName}
             onChange={(e) => setTaskName(e.target.value)}
-            className="w-full p-2 border border-neutral-700 rounded-md bg-neutral-900 text-neutral-200"
+            className="w-full p-2 border text-md border-neutral-700 rounded-md bg-neutral-900 text-neutral-200"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-neutral-400">
+          <label className="block text-md font-medium text-neutral-400">
             Task Notes
           </label>
-          <Input
+          <Textarea
             value={taskNotes}
             onChange={(e) => setTaskNotes(e.target.value)}
-            className="w-full p-2 border border-neutral-700 rounded-md bg-neutral-900 text-neutral-200"
+            className="w-full p-2 border text-md border-neutral-700 rounded-md bg-neutral-900 text-neutral-200"
           />
         </div>
       </div>
-
-      <div className="flex flex-grow justify-end space-y-3 flex-col">
+      <VariableScrollArea onClick={variableAdder} />
+      <div className="flex items-center flex-grow justify-end space-y-3 flex-col">
+        <small className="flex flex-row items-center text-lg space-x-1">
+          <IconInfoCircle size={20} />
+          <p>Use </p>
+          <span className="bg-neutral-900 font-semibold tracking-wider px-2 py-0 rounded-xl ">
+            var::
+          </span>
+          <p>to use variables and</p>{" "}
+          <span className="bg-neutral-900 font-semibold tracking-wider px-2 py-0 rounded-xl ">
+            ` `
+          </span>
+          <p> to escape</p>
+        </small>
         <button
           className="w-full p-2 rounded-lg border border-white text-xl font-semibold h-fit"
           onClick={test}

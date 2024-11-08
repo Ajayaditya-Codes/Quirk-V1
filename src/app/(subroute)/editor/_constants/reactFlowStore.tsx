@@ -33,19 +33,8 @@ type FlowState = {
   conditionHandler: () => void;
 };
 
-// Initialize the store
 export const useFlowStore = create<FlowState>((set) => ({
-  nodes: [
-    {
-      id: "github-1",
-      type: "github",
-      data: {
-        repoName: "",
-        listenerType: "issues",
-      },
-      position: { x: 0, y: 0 }, // Position of the GitHub node
-    },
-  ],
+  nodes: [],
   edges: [],
   edgeOptions: {
     deletable: true,

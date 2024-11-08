@@ -20,7 +20,7 @@ type SlackState = {
 };
 type ConditionState = {
   variable: string;
-  condition: ">" | "<" | "==" | "!=" | ">=" | "<=";
+  condition: ">" | "<" | "==" | "!=" | ">=" | "<=" | "has" | "not has";
   value: string;
 };
 

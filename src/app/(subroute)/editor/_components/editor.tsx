@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   applyEdgeChanges,
   applyNodeChanges,
@@ -18,9 +18,12 @@ import { useFlowStore } from "../_constants/reactFlowStore";
 import { useToast } from "@/hooks/use-toast";
 import { useMenuStore } from "../_constants/menuStateStore";
 import { IconTrashX } from "@tabler/icons-react";
+import { usePathname } from "next/navigation";
 
 export default function Editor() {
-  // Access state and actions from Zustand store
+  const path = usePathname();
+  const slug = path?.split("/").pop();
+
   const { toast } = useToast();
   const {
     nodes,
@@ -96,6 +99,29 @@ export default function Editor() {
     setSelectedNode(null);
     setMenuState("menu");
   };
+  useEffect(() => {
+    const fetchWorkflow = async () => {
+      try {
+        const response = await fetch(`/api/workflow/get?workflowName=${slug}`);
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+        const data = await response.json();
+        console.log(data);
+        console.log(data.Edges);
+        console.log(data.Nodes);
+        setNodes(data.Nodes);
+        setEdges(data.Edges);
+      } catch (error: any) {
+        toast({
+          title: "There was Some Error Fetching the Workflow",
+          variant: "destructive",
+        });
+      }
+    };
+
+    fetchWorkflow();
+  }, []);
 
   return (
     <div className="border-8 w-[70vw] h-full border-neutral-800 bg-black bg-opacity-50 rounded-md">

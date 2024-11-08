@@ -34,6 +34,7 @@ export const Workflows = pgTable("Workflows", {
     .array()
     .notNull()
     .default(sql`ARRAY[]::jsonb[]`),
+  Published: boolean("Published").notNull().default(false),
 });
 
 export const Logs = pgTable("Logs", {

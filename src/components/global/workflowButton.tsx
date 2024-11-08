@@ -14,7 +14,7 @@ export default function WorkflowButton({ bgDisabled }: Props) {
   const handle = async () => {
     const workflowName = join(generate(3));
     try {
-      const response = await fetch("/api/create-workflow", {
+      const response = await fetch("/api/workflow/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

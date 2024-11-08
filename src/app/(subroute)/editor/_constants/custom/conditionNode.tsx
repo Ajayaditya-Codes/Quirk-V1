@@ -6,7 +6,7 @@ import WorkflowNode from "../../_components/workflowNode";
 
 type ConditionNodeData = {
   variable: string;
-  condition: ">" | "<" | "==" | "!=" | ">=" | "<=";
+  condition: ">" | "<" | "==" | "!=" | ">=" | "<=" | "has" | "not has";
   value: string;
   id: string;
 };

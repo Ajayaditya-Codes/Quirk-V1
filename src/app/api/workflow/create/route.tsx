@@ -63,6 +63,23 @@ export async function POST(req: NextRequest) {
       .insert(Workflows)
       .values({
         WorkflowName: newWorkflowName,
+        GitHubNode: {
+          repoName: "",
+          listenerType: "issues",
+        },
+        Nodes: [
+          {
+            id: "github-1",
+            type: "github",
+            data: {
+              repoName: "",
+              listenerType: "issues",
+            },
+            position: { x: 0, y: 0 }, // Position of the GitHub node
+          },
+        ],
+        Edges: [],
+        Published: false,
       })
       .execute();
     await db.insert(Logs).values({
