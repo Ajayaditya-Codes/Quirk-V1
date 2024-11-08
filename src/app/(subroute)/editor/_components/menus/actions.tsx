@@ -6,10 +6,8 @@ import {
 } from "@tabler/icons-react";
 import { workflows } from "../../_constants/worklows";
 import WorkflowButton from "../workflowButton";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { useReactFlow } from "@xyflow/react";
 import { useFlowStore } from "../../_constants/reactFlowStore";
 
 export default function Actions() {
@@ -17,7 +15,7 @@ export default function Actions() {
   const router = useRouter();
   const slug = path?.split("/").pop();
   const { toast } = useToast();
-  const { nodes, edges } = useFlowStore();
+  const { nodes, edges, updateSaveState, saveStatus } = useFlowStore();
 
   const deleteHandler = async () => {
     try {
@@ -85,6 +83,13 @@ export default function Actions() {
         githubData = node;
       }
     }
+    if (githubData.data.repoName === "") {
+      toast({
+        title: "Please Select a Repository Name",
+        variant: "destructive",
+      });
+      return;
+    }
     try {
       const response = await fetch("/api/workflow/update", {
         method: "POST",
@@ -109,15 +114,28 @@ export default function Actions() {
         });
         return;
       }
+      updateSaveState(true);
 
       toast({
         title: `Workflow ${publish ? "Published" : "Saved"} Successfully`,
       });
+      router.refresh();
     } catch (error) {
       toast({
         title: `Failed to ${publish ? "Publish" : "Save"} the Workflow`,
         variant: "destructive",
       });
+    }
+  };
+
+  const routeHandler = () => {
+    if (saveStatus === true) {
+      router.push("/workflows");
+    } else {
+      toast({ title: "You got 10 secs to Save Your Unsaved Changes! 🚨" });
+      setTimeout(() => {
+        router.push("/workflows");
+      }, 10000);
     }
   };
 
@@ -140,12 +158,12 @@ export default function Actions() {
           <IconDeviceFloppy />
         </button>
 
-        <Link
+        <button
+          onClick={routeHandler}
           className="bg-neutral-900 p-2 rounded-xl border border-neutral-700"
-          href={"/workflows"}
         >
           <IconArrowBackUpDouble />
-        </Link>
+        </button>
       </div>
       {workflows &&
         workflows.map((workflow, idx) => {

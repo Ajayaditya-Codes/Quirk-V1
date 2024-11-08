@@ -105,7 +105,7 @@ const FloatingDockDesktop = ({
       <Link href="/">
         <h5 className="font-bold text-2xl text-neutral-400">quirk.</h5>
       </Link>
-      <Separator orientation="vertical" className="mx-2" />
+      <Separator orientation="vertical" className="mx-2 bg-white" />
       {items.map((item) => (
         <IconContainer mouseX={mouseX} key={item.title} {...item} />
       ))}

@@ -28,7 +28,7 @@ export async function POST(req: Request) {
   }
 
   // Parse the request body to get the repository name
-  const { repo } = await req.json();
+  const { repo, workflow } = await req.json();
   if (!repo) {
     return NextResponse.json(
       { message: "Repository name is required" },
@@ -41,16 +41,17 @@ export async function POST(req: Request) {
   const octokit = new Octokit({
     auth: accessToken,
   });
+  const slug = repo?.split("/").pop();
 
   try {
     const response = await octokit.request("POST /repos/{owner}/{repo}/hooks", {
       owner: owner || "",
-      repo: repo,
+      repo: slug,
       name: "web",
       active: true,
       events: ["issues"],
       config: {
-        url: " https://patient-husky-uniquely.ngrok-free.app/github/test",
+        url: "https://patient-husky-uniquely.ngrok-free.app/api/github/handler",
         content_type: "json",
         insecure_ssl: "0",
       },
@@ -62,8 +63,11 @@ export async function POST(req: Request) {
     return NextResponse.json({
       message: "Webhook created successfully",
       data: response.data,
+      hook_id: response.data.id,
     });
   } catch (error) {
+    console.log(error);
+
     return NextResponse.json(
       { message: "Error creating webhook", error: error },
       { status: 500 }

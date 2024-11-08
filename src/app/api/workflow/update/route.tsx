@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/drizzle";
-import { auth } from "@clerk/nextjs/server";
 import { Logs, Workflows } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { auth, getAuth } from "@clerk/nextjs/server";
 
 export async function POST(req: NextRequest) {
   const { userId } = await auth();
@@ -38,7 +38,167 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Update the workflow data
+    type GithubData = { repoName: string; listenerType: string };
+    type GithubNode = { data: GithubData };
+
+    const oldGitHubData: GithubNode = existingWorkflow[0]
+      .GitHubNode as GithubNode;
+
+    // Check if GitHub data has been modified
+    const githubDataChanged =
+      oldGitHubData.data.repoName !== githubData.data.repoName ||
+      oldGitHubData.data.listenerType !== githubData.data.listenerType;
+    const { userId, sessionId, getToken } = await getAuth(req); // Automatically retrieves session context
+
+    if (!userId) {
+      return NextResponse.json(
+        { message: "User not authenticated" },
+        { status: 401 }
+      );
+    }
+
+    const sessionToken = await getToken(); // This will fetch the session token
+
+    if (!sessionToken) {
+      return NextResponse.json(
+        { message: "Session token not found" },
+        { status: 401 }
+      );
+    }
+    if (githubDataChanged && existingWorkflow[0].HookID) {
+      try {
+        const response = await fetch(
+          "https://localhost:3000/api/github/webhooks/delete",
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${sessionToken}`, // send Clerk token here
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              repo: oldGitHubData.data.repoName,
+              hookId: existingWorkflow[0].HookID,
+            }),
+          }
+        );
+        if (!response.ok) {
+          await db.insert(Logs).values({
+            LogMessage: `Failed to Delete Old Webhook ${existingWorkflow[0].HookID}`,
+            WorkflowName: workflowName,
+            Success: false,
+          });
+        }
+
+        await db.insert(Logs).values({
+          LogMessage: `Deleted Old Webhook ${existingWorkflow[0].HookID}`,
+          WorkflowName: workflowName,
+          Success: true,
+        });
+      } catch (error) {
+        await db.insert(Logs).values({
+          LogMessage: `Failed to Delete Old Webhook ${existingWorkflow[0].HookID}`,
+          WorkflowName: workflowName,
+          Success: false,
+        });
+      }
+    }
+    if (
+      (githubDataChanged || existingWorkflow[0].HookID === null) &&
+      githubData.data.listenerType === "issues"
+    ) {
+      try {
+        const response = await fetch(
+          "https://localhost:3000/api/github/webhooks/issues",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${sessionToken}`, // send Clerk token here
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              repo: githubData.data.repoName,
+              workflow: workflowName,
+            }),
+          }
+        );
+        const { hook_id } = await response.json();
+
+        if (!response.ok) {
+          await db.insert(Logs).values({
+            LogMessage: `Failed to Create Webhook on ${githubData.data.repoName}`,
+            WorkflowName: workflowName,
+            Success: false,
+          });
+        }
+
+        await db.insert(Logs).values({
+          LogMessage: `Created Webhook on ${githubData.data.repoName}`,
+          WorkflowName: workflowName,
+          Success: true,
+        });
+        await db
+          .update(Workflows)
+          .set({
+            HookID: hook_id,
+          })
+          .where(eq(Workflows.WorkflowName, workflowName))
+          .execute();
+      } catch (error) {
+        await db.insert(Logs).values({
+          LogMessage: `Failed to Create Webhook on ${githubData.data.repoName}`,
+          WorkflowName: workflowName,
+          Success: false,
+        });
+      }
+    }
+    if (
+      (githubDataChanged || existingWorkflow[0].HookID === null) &&
+      githubData.data.listenerType === "push"
+    ) {
+      try {
+        const response = await fetch(
+          "https://localhost:3000/api/github/webhooks/push",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${sessionToken}`, // send Clerk token here
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              repo: githubData.data.repoName,
+              workflow: workflowName,
+            }),
+          }
+        );
+        const { hook_id } = await response.json();
+        if (!response.ok) {
+          await db.insert(Logs).values({
+            LogMessage: `Failed to Create Webhook on ${githubData.data.repoName}`,
+            WorkflowName: workflowName,
+            Success: false,
+          });
+        }
+
+        await db.insert(Logs).values({
+          LogMessage: `Created Webhook on ${githubData.data.repoName}`,
+          WorkflowName: workflowName,
+          Success: true,
+        });
+        await db
+          .update(Workflows)
+          .set({
+            HookID: hook_id,
+          })
+          .where(eq(Workflows.WorkflowName, workflowName))
+          .execute();
+      } catch (error) {
+        await db.insert(Logs).values({
+          LogMessage: `Failed to Create Webhook on ${githubData.data.repoName}`,
+          WorkflowName: workflowName,
+          Success: false,
+        });
+      }
+    }
     await db
       .update(Workflows)
       .set({

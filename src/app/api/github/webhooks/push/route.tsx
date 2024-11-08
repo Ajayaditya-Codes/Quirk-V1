@@ -41,15 +41,18 @@ export async function POST(req: Request) {
     auth: accessToken,
   });
 
+  const slug = repo?.split("/").pop();
+  console.log(owner, slug);
+
   try {
     const response = await octokit.request("POST /repos/{owner}/{repo}/hooks", {
       owner: owner || "",
-      repo: repo,
-      name: workflow,
+      repo: slug,
+      name: "web",
       active: true,
       events: ["push"],
       config: {
-        url: " https://patient-husky-uniquely.ngrok-free.app/api/github/handler",
+        url: "https://patient-husky-uniquely.ngrok-free.app/api/github/handler",
         content_type: "json",
         insecure_ssl: "0",
       },
@@ -61,8 +64,10 @@ export async function POST(req: Request) {
     return NextResponse.json({
       message: "Webhook created successfully",
       data: response.data,
+      hook_id: response.data.id,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { message: "Error creating webhook", error: error },
       { status: 500 }

@@ -33,6 +33,7 @@ export default function Editor() {
     setNodes,
     setEdges,
     addNewEdge,
+    updateSaveState,
   } = useFlowStore();
   const [selectedEdge, setSelectedEdge] = useState<Edge | null>(null);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
@@ -40,6 +41,7 @@ export default function Editor() {
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
+      updateSaveState(false);
       const updatedNodes = applyNodeChanges(changes, nodes);
       setNodes(updatedNodes); // directly set updatedNodes
     },
@@ -48,6 +50,7 @@ export default function Editor() {
 
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
+      updateSaveState(false);
       const updatedEdges = applyEdgeChanges(changes, edges);
       setEdges(updatedEdges); // directly set updatedEdges
     },
@@ -56,6 +59,7 @@ export default function Editor() {
 
   const onConnect = useCallback(
     (connection: Connection) => {
+      updateSaveState(false);
       addNewEdge(connection); // Use the store's method to add a new edge
     },
     [addNewEdge]
@@ -75,6 +79,7 @@ export default function Editor() {
       const updatedEdges = edges.filter(
         (el: Edge) => el.id !== selectedEdge.id
       );
+      updateSaveState(false);
       setEdges(updatedEdges);
       setSelectedEdge(null);
     }
@@ -88,6 +93,7 @@ export default function Editor() {
         (el: Edge) =>
           el.source !== selectedNode?.id && el.target !== selectedNode?.id
       );
+      updateSaveState(false);
       setNodes(updatedNodes);
       setEdges(updatedEdges);
     } else {
@@ -107,9 +113,6 @@ export default function Editor() {
           throw new Error(`Error: ${response.statusText}`);
         }
         const data = await response.json();
-        console.log(data);
-        console.log(data.Edges);
-        console.log(data.Nodes);
         setNodes(data.Nodes);
         setEdges(data.Edges);
       } catch (error: any) {

@@ -31,6 +31,9 @@ type FlowState = {
   slackHandler: () => void;
   asanaHandler: () => void;
   conditionHandler: () => void;
+
+  saveStatus: boolean;
+  updateSaveState: (status: boolean) => void;
 };
 
 export const useFlowStore = create<FlowState>((set) => ({
@@ -166,4 +169,7 @@ export const useFlowStore = create<FlowState>((set) => ({
       nodes: [...state.nodes, newNode],
     }));
   },
+
+  saveStatus: true,
+  updateSaveState: (status) => set(() => ({ saveStatus: status })),
 }));
