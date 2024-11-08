@@ -15,6 +15,13 @@
       "when": 1730878503373,
       "tag": "0001_good_tusk",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731036343749,
+      "tag": "0002_absurd_wallop",
+      "breakpoints": true
     }
   ]
 }

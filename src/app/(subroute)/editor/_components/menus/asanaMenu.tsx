@@ -55,8 +55,34 @@ export default function AsanaMenu() {
     isAsanaState(nodeState) ? nodeState.taskNotes : ""
   );
 
+  const test = async () => {
+    try {
+      const response = await fetch("/api/asana/create-task", {
+        method: "POST",
+        body: JSON.stringify({
+          projectIds: [selectedProject.id],
+          taskName: taskName,
+          taskNotes: taskNotes,
+        }),
+      });
+      const result = await response.json();
+
+      if (response.ok) {
+        toast({ title: "Task created successfully" });
+      } else {
+        toast({ title: "Failed to create task", variant: "destructive" });
+        console.error("Error:", result.error);
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+      toast({
+        title: "Failed to create task due to network error",
+        variant: "destructive",
+      });
+    }
+  };
+
   useEffect(() => {
-    // Set the initial state when nodeState or projects change
     if (isAsanaState(nodeState)) {
       setSelectedProject(nodeState.project);
       setTaskName(nodeState.taskName);
@@ -157,7 +183,13 @@ export default function AsanaMenu() {
         </div>
       </div>
 
-      <div className="flex flex-grow items-end">
+      <div className="flex flex-grow justify-end space-y-3 flex-col">
+        <button
+          className="w-full p-2 rounded-lg border border-white text-xl font-semibold h-fit"
+          onClick={test}
+        >
+          Test
+        </button>
         <button
           className="w-full p-2 rounded-lg bg-white text-black text-xl font-semibold h-fit"
           onClick={handleSave}

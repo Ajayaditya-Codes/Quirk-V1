@@ -108,7 +108,6 @@ export default function ConditionMenu() {
           />
         </div>
 
-        {/* Condition Dropdown */}
         <div>
           <label className="block text-sm font-medium text-neutral-400">
             Condition

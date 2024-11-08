@@ -16,7 +16,7 @@ type Props = {
 export default function WorkflowCard({ name }: Props) {
   return (
     <Link href={`/editor/${name}`}>
-      <Card className="flex w-full items-end justify-between bg-black text-white">
+      <Card className="flex w-full items-end justify-between bg-black text-white border border-white">
         <CardHeader className="flex flex-col gap-4 ">
           <div className="flex flex-row gap-2">
             <IconBrandGithub />

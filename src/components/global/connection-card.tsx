@@ -61,7 +61,7 @@ const ConnectionCard = ({
     }
   };
   return (
-    <Card className="flex w-full items-end bg-black text-white justify-between">
+    <Card className="flex w-full items-end bg-black text-white justify-between border border-white">
       <CardHeader className="flex flex-col gap-4">
         <div className="flex flex-row gap-2">{icon}</div>
         <div>
@@ -69,14 +69,14 @@ const ConnectionCard = ({
           <CardDescription>{description}</CardDescription>
         </div>
       </CardHeader>
-      <div className="flex flex-row gap-2 space-x-3 p-4">
+      <div className="flex flex-row gap-2 space-x-3 p-4 text-white">
         <button
           disabled={!allowDisconnect || !connected}
           onClick={() => handleDisconnect(title)}
           className={
             !allowDisconnect || !connected
-              ? "rounded-lg bg-neutral-900 p-2 text-gray-400 border border-neutral-700 font-bold text-primary-foreground"
-              : "rounded-lg bg-neutral-900 p-2 border border-red-800 font-bold text-primary-foreground"
+              ? "rounded-lg bg-neutral-900 p-2 text-gray-400 border  border-neutral-700 font-bold "
+              : "rounded-lg bg-neutral-900 p-2 border border-red-800 font-bold "
           }
         >
           Disconnect
@@ -84,14 +84,14 @@ const ConnectionCard = ({
         {connected ? (
           <button
             disabled
-            className=" rounded-lg bg-neutral-900 text-gray-400  border border-neutral-700 p-2 font-bold text-primary-foreground w-26 text-center"
+            className=" rounded-lg bg-neutral-900 text-gray-400  border border-neutral-700 p-2 font-bold  w-26 text-center"
           >
             Connected
           </button>
         ) : (
           <Link
             href={connectionLink ? connectionLink : "#"}
-            className=" rounded-lg bg-neutral-900 p-2 font-bold border border-white text-primary-foreground w-26 text-center"
+            className=" rounded-lg bg-neutral-900 p-2 font-bold border border-white  w-26 text-center"
           >
             Connect
           </Link>

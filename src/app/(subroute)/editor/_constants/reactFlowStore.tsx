@@ -79,8 +79,30 @@ export const useFlowStore = create<FlowState>((set) => ({
   setEdges: (edges) => set({ edges }),
   addNewEdge: (connection) =>
     set((state) => {
-      const updatedEdges = addEdge(connection, state.edges); // Add the new edge
-      return { edges: updatedEdges }; // Update edges with the new array
+      const { edges, nodes } = state;
+
+      const targetNode = nodes.find((node) => node.id === connection.target);
+      const sourceNode = nodes.find((node) => node.id === connection.source);
+
+      const isGitHubNode = (node: any) => node?.type === "github";
+
+      if (isGitHubNode(targetNode) || isGitHubNode(sourceNode)) {
+        return { edges: addEdge(connection, edges) };
+      }
+
+      const incomingEdges = edges.filter(
+        (edge) => edge.target === connection.target
+      );
+      const outgoingEdges = edges.filter(
+        (edge) => edge.source === connection.source
+      );
+
+      if (incomingEdges.length === 0 && outgoingEdges.length === 0) {
+        const updatedEdges = addEdge(connection, edges);
+        return { edges: updatedEdges };
+      }
+
+      return { edges };
     }),
   githubHandler: () => {
     const newNode: Node = {

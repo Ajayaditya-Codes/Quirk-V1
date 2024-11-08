@@ -48,6 +48,32 @@ export default function SlackMenu() {
     }
   }, [nodeState, channels]);
 
+  const test = async () => {
+    try {
+      const response = await fetch("/api/slack/messenger", {
+        method: "POST",
+        body: JSON.stringify({
+          channel: selectedChannel,
+          text: message,
+        }),
+      });
+      const result = await response.json();
+
+      if (response.ok) {
+        toast({ title: "Message sent successfully" });
+      } else {
+        toast({ title: "Failed to Send Message", variant: "destructive" });
+        console.error("Error:", result.error);
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+      toast({
+        title: "Failed to Send Message due to network error",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleSave = () => {
     // Update node state and flow node with the new data
     setNodeState({
@@ -117,7 +143,13 @@ export default function SlackMenu() {
         </div>
       </div>
 
-      <div className="flex flex-grow items-end">
+      <div className="flex flex-grow flex-col justify-end space-y-3">
+        <button
+          className="w-full p-2 rounded-lg border border-white text-xl font-semibold h-fit"
+          onClick={test}
+        >
+          Test
+        </button>
         <button
           className="w-full p-2 rounded-lg bg-white text-black text-xl font-semibold h-fit"
           onClick={handleSave}

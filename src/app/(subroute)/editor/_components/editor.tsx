@@ -1,20 +1,27 @@
 "use client";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import {
   applyEdgeChanges,
   applyNodeChanges,
   Background,
   Connection,
   Controls,
+  Edge,
   EdgeChange,
+  Node,
   NodeChange,
+  Panel,
   ReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useFlowStore } from "../_constants/reactFlowStore";
+import { useToast } from "@/hooks/use-toast";
+import { useMenuStore } from "../_constants/menuStateStore";
+import { IconTrashX } from "@tabler/icons-react";
 
 export default function Editor() {
   // Access state and actions from Zustand store
+  const { toast } = useToast();
   const {
     nodes,
     edges,
@@ -24,6 +31,9 @@ export default function Editor() {
     setEdges,
     addNewEdge,
   } = useFlowStore();
+  const [selectedEdge, setSelectedEdge] = useState<Edge | null>(null);
+  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const { setMenuState } = useMenuStore();
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
@@ -48,11 +58,52 @@ export default function Editor() {
     [addNewEdge]
   );
 
+  const onEdgeClick = useCallback((event: any, edge: any) => {
+    setSelectedNode(null); // Clear selected node
+    setSelectedEdge(edge); // Store the selected edge
+  }, []);
+  const onNodeClick = useCallback((event: any, node: any) => {
+    setSelectedNode(node); // Clear selected node
+    setSelectedEdge(null); // Store the selected edge
+  }, []);
+
+  const handleDeleteEdge = () => {
+    if (selectedEdge) {
+      const updatedEdges = edges.filter(
+        (el: Edge) => el.id !== selectedEdge.id
+      );
+      setEdges(updatedEdges);
+      setSelectedEdge(null);
+    }
+  };
+  const handleDeleteNode = () => {
+    if (selectedNode?.id !== "github-1") {
+      const updatedNodes = nodes.filter(
+        (el: Node) => el.id !== selectedNode?.id
+      );
+      const updatedEdges = edges.filter(
+        (el: Edge) =>
+          el.source !== selectedNode?.id && el.target !== selectedNode?.id
+      );
+      setNodes(updatedNodes);
+      setEdges(updatedEdges);
+    } else {
+      toast({
+        title: "Cannot delete the GitHub Node",
+        variant: "destructive",
+      });
+    }
+    setSelectedNode(null);
+    setMenuState("menu");
+  };
+
   return (
     <div className="border-8 w-[70vw] h-full border-neutral-800 bg-black bg-opacity-50 rounded-md">
       <ReactFlow //@ts-ignore
         fitView
         nodes={nodes}
+        onNodeClick={onNodeClick}
+        onEdgeClick={onEdgeClick}
         edges={edges}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
@@ -69,6 +120,26 @@ export default function Editor() {
           size={1}
         />
         <Controls />
+        <Panel position="top-right">
+          <button
+            className={`bg-neutral-900 border-red-500 border flex-row space-x-2 w-fit p-3  text-xl font-semibold rounded-xl ${
+              selectedEdge === null ? "hidden" : " flex"
+            }`}
+            onClick={handleDeleteEdge} // Delete the edge on click
+          >
+            <IconTrashX className="text-red-500" />
+            <p>Delete Edge</p>{" "}
+          </button>
+          <button
+            className={`bg-neutral-900 border-red-500 border flex-row space-x-2 w-fit p-3  text-xl font-semibold rounded-xl ${
+              selectedNode === null ? "hidden" : " flex"
+            }`}
+            onClick={handleDeleteNode} // Delete the edge on click
+          >
+            <IconTrashX className="text-red-500" />
+            <p>Delete Node</p>{" "}
+          </button>
+        </Panel>
       </ReactFlow>
     </div>
   );

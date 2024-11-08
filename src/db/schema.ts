@@ -26,11 +26,11 @@ export const Workflows = pgTable("Workflows", {
   GitHubNode: jsonb("GitHubNode")
     .notNull()
     .default(sql`'{}'::jsonb`),
-  SlackNodes: jsonb("SlackNodes")
+  Nodes: jsonb("Nodes")
     .array()
     .notNull()
     .default(sql`ARRAY[]::jsonb[]`),
-  AsanaNode: jsonb("AsanaNode")
+  Edges: jsonb("Edges")
     .array()
     .notNull()
     .default(sql`ARRAY[]::jsonb[]`),
