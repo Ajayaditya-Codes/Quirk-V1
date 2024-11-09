@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import WorkflowButton from "@/components/global/workflowButton";
 import WorkflowCard from "@/components/global/workflowCard";
+import { IconInfoCircle } from "@tabler/icons-react";
 
 export default async function Page() {
   const { userId } = await auth();
@@ -31,9 +32,19 @@ export default async function Page() {
       </header>
       <div className="flex flex-col space-y-5">
         {userDetails && userDetails.Workflows.length > 0 ? (
-          userDetails.Workflows.map((workflow, index) => (
-            <WorkflowCard key={index} name={workflow} />
-          ))
+          <>
+            {userDetails.Workflows.map((workflow, index) => (
+              <WorkflowCard key={index} name={workflow} />
+            ))}
+            <small className="flex w-full items-center justify-center flex-row space-x-2">
+              <IconInfoCircle size={20} />
+              <p className="text-lg">
+                Please create only one workflow per repository. Adding multiple
+                workflows for the same repository may result in unexpected
+                behavior.
+              </p>
+            </small>
+          </>
         ) : (
           <div className="flex  w-full h-[30vh] justify-center items-end">
             <div className="flex flex-row items-center text-2xl font-semibold">
