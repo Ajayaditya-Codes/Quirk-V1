@@ -38,7 +38,7 @@ const AsanaNode: React.FC<AsanaNodeProps> = ({ id, data }) => {
       }
       setProjects(projects);
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       toast({
         title: "There was Some Error fetching the Projects",
         variant: "destructive",

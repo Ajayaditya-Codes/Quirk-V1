@@ -1,15 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/drizzle";
-import { auth } from "@clerk/nextjs/server";
+import { getAuth } from "@clerk/nextjs/server";
 import { Logs, Users, Workflows } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function DELETE(req: NextRequest) {
-  const { userId } = await auth();
+  const { userId, sessionId, getToken } = await getAuth(req); // Automatically retrieves session context
+  const sessionToken = await getToken(); // This will fetch the session token
 
   if (!userId) {
     return NextResponse.json(
       { error: "User not authenticated" },
+      { status: 401 }
+    );
+  }
+
+  if (!sessionToken) {
+    return NextResponse.json(
+      { message: "Session token not found" },
       { status: 401 }
     );
   }
@@ -25,7 +33,6 @@ export async function DELETE(req: NextRequest) {
   }
 
   const { workflowName } = await req.json();
-  console.log(workflowName);
 
   if (!workflowName) {
     return NextResponse.json(
@@ -49,6 +56,24 @@ export async function DELETE(req: NextRequest) {
   );
 
   try {
+    const existingWorkflow = await db
+      .select()
+      .from(Workflows)
+      .where(eq(Workflows.WorkflowName, workflowName))
+      .execute();
+
+    type GithubData = { repoName: string; listenerType: string };
+    type GithubNode = { data: GithubData };
+
+    const GithubData: GithubNode = existingWorkflow[0].GitHubNode as GithubNode;
+
+    if (existingWorkflow.length === 0) {
+      return NextResponse.json(
+        { error: "Workflow not found" },
+        { status: 404 }
+      );
+    }
+
     // Update the user's workflows
     await db
       .update(Users)
@@ -61,6 +86,44 @@ export async function DELETE(req: NextRequest) {
       .delete(Workflows)
       .where(eq(Workflows.WorkflowName, workflowName))
       .execute();
+
+    if (existingWorkflow[0].HookID) {
+      try {
+        const response = await fetch(
+          "https://localhost:3000/api/github/webhooks/delete",
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${sessionToken}`, // send Clerk token here
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              repo: GithubData.data.repoName,
+              hookId: existingWorkflow[0].HookID,
+            }),
+          }
+        );
+        if (!response.ok) {
+          await db.insert(Logs).values({
+            LogMessage: `Failed to Delete Old Webhook ${existingWorkflow[0].HookID}`,
+            WorkflowName: workflowName,
+            Success: false,
+          });
+        }
+
+        await db.insert(Logs).values({
+          LogMessage: `Deleted Old Webhook ${existingWorkflow[0].HookID}`,
+          WorkflowName: workflowName,
+          Success: true,
+        });
+      } catch (error) {
+        await db.insert(Logs).values({
+          LogMessage: `Failed to Delete Old Webhook ${existingWorkflow[0].HookID}`,
+          WorkflowName: workflowName,
+          Success: false,
+        });
+      }
+    }
 
     // Log the deletion
     await db.insert(Logs).values({

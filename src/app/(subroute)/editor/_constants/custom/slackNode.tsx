@@ -34,7 +34,7 @@ const SlackNode: React.FC<SlackNodeProps> = ({ id, data }) => {
       }
       setChannels(channels);
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       toast({
         title: "There was Some Error fetching the Channels",
         variant: "destructive",

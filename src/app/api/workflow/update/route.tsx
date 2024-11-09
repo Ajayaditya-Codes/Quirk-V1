@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     const githubDataChanged =
       oldGitHubData.data.repoName !== githubData.data.repoName ||
       oldGitHubData.data.listenerType !== githubData.data.listenerType;
-    const { userId, sessionId, getToken } = await getAuth(req); // Automatically retrieves session context
+    const { userId, getToken } = await getAuth(req); // Automatically retrieves session context
 
     if (!userId) {
       return NextResponse.json(

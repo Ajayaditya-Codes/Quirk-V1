@@ -28,6 +28,8 @@ export async function DELETE(req: Request) {
   }
 
   const { repo, hookId } = await req.json();
+  const slug = repo?.split("/").pop();
+
   if (!repo || !hookId) {
     return NextResponse.json(
       { message: "Repository name and webhook ID are required" },
@@ -45,11 +47,8 @@ export async function DELETE(req: Request) {
       "DELETE /repos/{owner}/{repo}/hooks/{hook_id}",
       {
         owner: owner || "",
-        repo: repo,
-        hook_id: hookId,
-        headers: {
-          "X-GitHub-Api-Version": "2022-11-28",
-        },
+        repo: slug,
+        hook_id: parseInt(hookId),
       }
     );
 

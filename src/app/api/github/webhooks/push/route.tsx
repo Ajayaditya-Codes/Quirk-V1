@@ -42,7 +42,6 @@ export async function POST(req: Request) {
   });
 
   const slug = repo?.split("/").pop();
-  console.log(owner, slug);
 
   try {
     const response = await octokit.request("POST /repos/{owner}/{repo}/hooks", {
@@ -67,7 +66,7 @@ export async function POST(req: Request) {
       hook_id: response.data.id,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.json(
       { message: "Error creating webhook", error: error },
       { status: 500 }

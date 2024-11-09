@@ -35,7 +35,7 @@ export default async function Page() {
         </h1>
       </header>
       <main>
-        <Table className="text-lg">
+        <Table className="text-lg   ">
           <TableCaption>A list of Your Activity Logs.</TableCaption>
           <TableHeader>
             <TableRow className="hover:bg-transparent">

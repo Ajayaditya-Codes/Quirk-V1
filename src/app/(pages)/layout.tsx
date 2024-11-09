@@ -65,7 +65,7 @@ const Layout = async (props: Props) => {
     <div className="h-screen overflow-scroll w-full bg-black bg-dot-white/[0.5]  relative flex-col flex p-5 text-white items-center ">
       <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-black [mask-image:radial-gradient(ellipse_at_center,transparent_85%,black)]"></div>
       <DashboardNavbar credits={userDetails && userDetails.Credits} />
-      <FloatingDock desktopClassName="fixed bottom-0 mb-5 " items={links} />
+      <FloatingDock desktopClassName="fixed bottom-0 mb-5 z-50" items={links} />
       <div className="w-full mt-20">{props.children}</div>
     </div>
   );
