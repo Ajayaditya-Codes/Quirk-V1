@@ -7,27 +7,40 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const Asana = require("asana");
-  const { userId } = await auth();
-  if (!userId) {
+  const { projectIds, taskName, taskNotes, token } = await req.json();
+  let asanaRefreshToken = token;
+
+  if (!projectIds || !taskName) {
     return NextResponse.json(
-      { error: "User not authenticated" },
-      { status: 401 }
+      { error: "Project IDs and task name are required" },
+      { status: 400 }
     );
   }
 
-  const user = await db
-    .select()
-    .from(Users)
-    .where(eq(Users.ClerkID, userId))
-    .execute();
-  if (!user.length || !user[0].AsanaRefreshToken) {
-    return NextResponse.json(
-      { error: "No Asana refresh token found" },
-      { status: 404 }
-    );
+  if (asanaRefreshToken === null) {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { error: "User not authenticated" },
+        { status: 401 }
+      );
+    }
+
+    const user = await db
+      .select()
+      .from(Users)
+      .where(eq(Users.ClerkID, userId))
+      .execute();
+    if (!user.length || !user[0].AsanaRefreshToken) {
+      return NextResponse.json(
+        { error: "No Asana refresh token found" },
+        { status: 404 }
+      );
+    }
+
+    asanaRefreshToken = user[0].AsanaRefreshToken;
   }
 
-  const asanaRefreshToken = user[0].AsanaRefreshToken;
   const tokenUrl = "https://app.asana.com/-/oauth_token";
   const clientId = process.env.ASANA_CLIENT_ID;
   const clientSecret = process.env.ASANA_CLIENT_SECRET;
@@ -61,8 +74,6 @@ export async function POST(req: NextRequest) {
     let token = client.authentications["token"];
     token.accessToken = tokenData.access_token;
     let tasksApiInstance = new Asana.TasksApi();
-
-    const { projectIds, taskName, taskNotes } = await req.json();
 
     let body = {
       data: {

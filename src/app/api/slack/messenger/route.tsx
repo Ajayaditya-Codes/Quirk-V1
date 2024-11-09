@@ -6,7 +6,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { channel, text } = await req.json();
+    const { channel, text, token } = await req.json();
+    let slackToken = token;
 
     if (!channel || !text) {
       return NextResponse.json(
@@ -15,29 +16,31 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { userId } = await auth();
-    let userDetails = null;
-    try {
-      const result =
-        userId &&
-        (await db
-          .select()
-          .from(Users)
-          .where(eq(Users.ClerkID, userId))
-          .execute());
+    if (slackToken === null) {
+      const { userId } = await auth();
+      let userDetails = null;
+      try {
+        const result =
+          userId &&
+          (await db
+            .select()
+            .from(Users)
+            .where(eq(Users.ClerkID, userId))
+            .execute());
 
-      userDetails = result && result.length > 0 ? result[0] : null;
-    } catch (error) {
-      console.error("Error fetching user details:", error);
-    }
+        userDetails = result && result.length > 0 ? result[0] : null;
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
 
-    const slackToken = userDetails?.SlackAccessToken;
+      slackToken = userDetails?.SlackAccessToken;
 
-    if (!slackToken) {
-      return NextResponse.json(
-        { error: "Slack token is not set" },
-        { status: 500 }
-      );
+      if (!slackToken) {
+        return NextResponse.json(
+          { error: "Slack token is not set" },
+          { status: 500 }
+        );
+      }
     }
 
     const response = await fetch("https://slack.com/api/chat.postMessage", {
