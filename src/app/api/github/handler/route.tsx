@@ -182,14 +182,17 @@ const SlackHandler = async (
   }
   const text = preprocessMessage(data?.message as string, payload);
   try {
-    const response = await fetch("https://localhost:3000/api/slack/messenger", {
-      method: "POST",
-      body: JSON.stringify({
-        channel: data?.channel,
-        text: text,
-        token: SlackAccessToken,
-      }),
-    });
+    const response = await fetch(
+      "https://quirk-v1.vercel.app/api/slack/messenger",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          channel: data?.channel,
+          text: text,
+          token: SlackAccessToken,
+        }),
+      }
+    );
     const result = await response.json();
 
     if (response.ok) {
@@ -251,7 +254,7 @@ const AsanaHandler = async (
   const taskNotes = preprocessMessage(data?.taskNotes, payload);
   try {
     const response = await fetch(
-      "https://localhost:3000/api/asana/create-task",
+      "https://quirk-v1.vercel.app/api/asana/create-task",
       {
         method: "POST",
         body: JSON.stringify({

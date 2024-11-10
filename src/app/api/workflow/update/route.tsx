@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
     if (githubDataChanged && existingWorkflow[0].HookID) {
       try {
         const response = await fetch(
-          "https://localhost:3000/api/github/webhooks/delete",
+          "https://quirk-v1.vercel.app/api/github/webhooks/delete",
           {
             method: "DELETE",
             headers: {
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
     ) {
       try {
         const response = await fetch(
-          "https://localhost:3000/api/github/webhooks/issues",
+          "https://quirk-v1.vercel.app/api/github/webhooks/issues",
           {
             method: "POST",
             headers: {
@@ -156,7 +156,7 @@ export async function POST(req: NextRequest) {
     ) {
       try {
         const response = await fetch(
-          "https://localhost:3000/api/github/webhooks/push",
+          "https://quirk-v1.vercel.app/api/github/webhooks/push",
           {
             method: "POST",
             headers: {

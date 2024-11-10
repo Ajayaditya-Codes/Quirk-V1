@@ -72,17 +72,20 @@ export async function POST(req: Request) {
             };
             const github: github = existing[0].GitHubNode as github;
             try {
-              await fetch("https://localhost:3000/api/github/webhooks/delete", {
-                method: "DELETE",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  repo: github.repoName,
-                  hookId: existing[0].HookID,
-                  id: evt.data.id,
-                }),
-              });
+              await fetch(
+                "https://quirk-v1.vercel.app/api/github/webhooks/delete",
+                {
+                  method: "DELETE",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    repo: github.repoName,
+                    hookId: existing[0].HookID,
+                    id: evt.data.id,
+                  }),
+                }
+              );
             } catch (error) {
               return;
             }

@@ -89,7 +89,7 @@ export async function DELETE(req: NextRequest) {
     if (existingWorkflow[0].HookID) {
       try {
         const response = await fetch(
-          "https://localhost:3000/api/github/webhooks/delete",
+          "https://quirk-v1.vercel.app/api/github/webhooks/delete",
           {
             method: "DELETE",
             headers: {

@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
 
     await updateSlackAccessToken(data.authed_user.access_token);
 
-    return NextResponse.redirect("https://localhost:3000/connections");
+    return NextResponse.redirect("https://quirk-v1.vercel.app/connections");
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch access token" },
