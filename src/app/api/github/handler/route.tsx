@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     repoName: body.repository.full_name,
     listenerType: "issues",
   };
-  if (!body?.issues) {
+  if (!body?.issue) {
     GitHubData.listenerType = "push";
   }
 
@@ -56,6 +56,26 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json({ message: "No User Found" }, { status: 404 });
     }
+
+    if (user[0].Credits < 1) {
+      await db.insert(Logs).values({
+        LogMessage: `User ${user[0].Username} has Insufficient Credits`,
+        WorkflowName: workflow[0].WorkflowName,
+        Success: false,
+      });
+
+      return NextResponse.json(
+        { message: "Insufficient Credits" },
+        { status: 402 }
+      );
+    }
+
+    await db
+      .update(Users)
+      .set({
+        Credits: user[0].Credits - 1,
+      })
+      .execute();
 
     const slackAccessToken = user[0].SlackAccessToken;
     const asanaRefreshToken = user[0].AsanaRefreshToken;

@@ -4,10 +4,11 @@ import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { db } from "@/db/drizzle";
-import { Users } from "@/db/schema";
+import { Logs, Users, Workflows } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function POST(req: Request) {
-  const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+  const WEBHOOK_SECRET = process.env.DELETE_USER_WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
     throw new Error(
@@ -46,23 +47,27 @@ export async function POST(req: Request) {
     });
   }
 
-  const addUser = async (ClerkID: string, Username: string, Email: string) => {
-    await db
-      .insert(Users)
-      .values({
-        ClerkID: ClerkID,
-        Username: Username,
-        Email: Email,
-        Credits: 20,
-      })
-      .execute();
-  };
+  try {
+    if (evt?.data?.id) {
+      const user = await db
+        .select()
+        .from(Users)
+        .where(eq(Users.ClerkID, evt.data.id))
+        .execute();
 
-  addUser(
-    payload.data.id,
-    payload.data.username,
-    payload.data.email_addresses[0].email_address
-  );
+      for (const workflow of user[0].Workflows) {
+        await db
+          .delete(Workflows)
+          .where(eq(Workflows.WorkflowName, workflow))
+          .execute();
+        await db.delete(Logs).where(eq(Logs.WorkflowName, workflow)).execute();
+      }
 
-  return new Response("", { status: 200 });
+      await db.delete(Users).where(eq(Users.ClerkID, evt.data.id)).execute();
+    }
+    return new Response("", { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return new Response("Error occured", { status: 500 });
+  }
 }
