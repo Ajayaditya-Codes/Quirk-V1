@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/lib/theme-provider";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Quirk",
@@ -43,9 +44,17 @@ export default function RootLayout({
       }}
     >
       <html lang="en">
-        <body className={"antialiased bg-black text-white "}>
-          <ThemeProvider>{children}</ThemeProvider>
-          <Toaster />
+        <body className="antialiased bg-black text-white">
+          <div className="hidden lg:flex">
+            <ThemeProvider>{children}</ThemeProvider>
+            <Toaster />
+          </div>
+          <div className="lg:hidden flex justify-center items-center w-screen h-screen flex-col space-y-5 p-3">
+            <Image src="/desktop.png" width={200} height={200} alt="desktop" />
+            <h3 className="text-xl font-semibold text-center">
+              Quirk V1 is Available Only on Desktop
+            </h3>
+          </div>
         </body>
       </html>
     </ClerkProvider>

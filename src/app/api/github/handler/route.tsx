@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     repoName: body.repository.full_name,
     listenerType: "issues",
   };
-  if (!body?.issue) {
+  if (!body.issue && body?.hook?.events?.includes("push")) {
     GitHubData.listenerType = "push";
   }
 
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
         WorkflowName: "No Workflow Found",
         Success: false,
       });
-
+      console.log("he");
       return NextResponse.json(
         { message: "No Workflow Found" },
         { status: 404 }
@@ -53,30 +53,31 @@ export async function POST(req: NextRequest) {
         WorkflowName: "No User Found",
         Success: false,
       });
-
+      console.log("she");
       return NextResponse.json({ message: "No User Found" }, { status: 404 });
     }
 
-    if (user[0].Credits < 1) {
-      await db.insert(Logs).values({
-        LogMessage: `User ${user[0].Username} has Insufficient Credits`,
-        WorkflowName: workflow[0].WorkflowName,
-        Success: false,
-      });
+    if (!body?.hook) {
+      if (user[0].Credits < 1) {
+        await db.insert(Logs).values({
+          LogMessage: `User ${user[0].Username} has Insufficient Credits`,
+          WorkflowName: workflow[0].WorkflowName,
+          Success: false,
+        });
 
-      return NextResponse.json(
-        { message: "Insufficient Credits" },
-        { status: 402 }
-      );
+        return NextResponse.json(
+          { message: "Insufficient Credits" },
+          { status: 402 }
+        );
+      }
+
+      await db
+        .update(Users)
+        .set({
+          Credits: user[0].Credits - 1,
+        })
+        .execute();
     }
-
-    await db
-      .update(Users)
-      .set({
-        Credits: user[0].Credits - 1,
-      })
-      .execute();
-
     const slackAccessToken = user[0].SlackAccessToken;
     const asanaRefreshToken = user[0].AsanaRefreshToken;
 

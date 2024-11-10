@@ -19,15 +19,15 @@ const DashboardNavbar = async ({ credits }: Props) => {
     <header className="fixed top-0 right-0 p-5 left-0 w-full mb-5 bg-black h-24 z-40 flex items-center justify-between">
       <Link href="/">
         <aside className="flex items-center gap-[2px]">
-          <p className="text-4xl font-bold -mr-1">Qu</p>
+          <p className="text-4xl font-bold -mr-2">Qu</p>
           <Image
             src="/flash.png"
-            width={30}
-            height={30}
+            width={40}
+            height={40}
             alt="fuzzie logo"
             className="shadow-sm"
           />
-          <p className="text-4xl font-bold -ml-1">rk</p>
+          <p className="text-4xl font-bold -ml-2">rk</p>
         </aside>
       </Link>
 

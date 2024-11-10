@@ -33,11 +33,11 @@ export default function Home() {
           }
         >
           <Image
-            src={`/temp-banner.png`}
+            src={`/banner.png`}
             alt="hero"
-            height={720}
-            width={1400}
-            className="mx-auto rounded-2xl object-cover h-full object-left-top"
+            width={1920}
+            height={1080}
+            className="mx-auto rounded-2xl object-fill w-full h-full object-center"
             draggable={false}
           />
         </ContainerScroll>

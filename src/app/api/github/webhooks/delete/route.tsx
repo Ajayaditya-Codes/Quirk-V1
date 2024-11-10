@@ -3,9 +3,14 @@ import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 export async function DELETE(req: Request) {
-  const { userId } = await auth();
+  const { repo, hookId, id } = await req.json();
+  let userID = id;
+  if (!userID) {
+    const { userId } = await auth();
+    userID = userId;
+  }
 
-  if (!userId) {
+  if (!userID) {
     return NextResponse.json({ message: "User not found" });
   }
 
@@ -14,7 +19,7 @@ export async function DELETE(req: Request) {
 
   const clerkResponse: any = await clerkClient();
   const token = await clerkResponse.users.getUserOauthAccessToken(
-    userId,
+    userID,
     provider
   );
 
@@ -27,7 +32,6 @@ export async function DELETE(req: Request) {
     );
   }
 
-  const { repo, hookId } = await req.json();
   const slug = repo?.split("/").pop();
 
   if (!repo || !hookId) {

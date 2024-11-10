@@ -8,15 +8,15 @@ const Navbar = async (props: Props) => {
   return (
     <header className="fixed right-0 left-0 top-0 p-7 bg-black  z-[100] flex items-center justify-between">
       <aside className="flex items-center gap-[2px] text-white">
-        <p className="text-4xl font-bold -mr-1">Qu</p>
+        <p className="text-4xl font-bold -mr-2">Qu</p>
         <Image
           src="/flash.png"
-          width={30}
-          height={30}
+          width={40}
+          height={40}
           alt="fuzzie logo"
           className="shadow-sm"
         />
-        <p className="text-4xl font-bold -ml-1">rk</p>
+        <p className="text-4xl font-bold -ml-2">rk</p>
       </aside>
       <aside className="flex items-center gap-4">
         <Link
