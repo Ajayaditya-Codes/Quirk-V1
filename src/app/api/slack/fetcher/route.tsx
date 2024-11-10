@@ -2,9 +2,9 @@ import { db } from "@/db/drizzle";
 import { Users } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const { userId } = await auth();
   let userDetails = null;
   try {

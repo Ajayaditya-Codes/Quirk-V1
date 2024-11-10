@@ -12,6 +12,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { generate } from "random-words";
 import { useRouter } from "next/navigation";
+import React from "react";
 
 type Props = {
   name: string;

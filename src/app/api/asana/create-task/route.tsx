@@ -70,12 +70,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let client = Asana.ApiClient.instance;
-    let token = client.authentications["token"];
+    const client = Asana.ApiClient.instance;
+    const token = client.authentications["token"];
     token.accessToken = tokenData.access_token;
-    let tasksApiInstance = new Asana.TasksApi();
+    const tasksApiInstance = new Asana.TasksApi();
 
-    let body = {
+    const body = {
       data: {
         name: taskName,
         approval_status: "pending",
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
         taskNotes: taskNotes,
       },
     };
-    let opts = {};
+    const opts = {};
 
     try {
       const result = await tasksApiInstance.createTask(body, opts);

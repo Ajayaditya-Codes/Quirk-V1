@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import {
   IconArrowBackUpDouble,
   IconDeviceFloppy,
@@ -27,8 +28,6 @@ export default function Actions() {
         body: JSON.stringify({ workflowName: slug }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
         toast({
           title: "Failed to Delete Workflow",
@@ -55,8 +54,6 @@ export default function Actions() {
         },
         body: JSON.stringify({ workflowName: slug }),
       });
-
-      const data = await response.json();
 
       if (!response.ok) {
         toast({
@@ -104,8 +101,6 @@ export default function Actions() {
           publish: publish,
         }),
       });
-
-      const data = await response.json();
 
       if (!response.ok) {
         toast({

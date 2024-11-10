@@ -5,7 +5,7 @@ import { Logs, Users, Workflows } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function DELETE(req: NextRequest) {
-  const { userId, sessionId, getToken } = await getAuth(req); // Automatically retrieves session context
+  const { userId, getToken } = await getAuth(req); // Automatically retrieves session context
   const sessionToken = await getToken(); // This will fetch the session token
 
   if (!userId) {

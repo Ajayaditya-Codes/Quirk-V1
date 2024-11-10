@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { db } from "@/db/drizzle";
 import { auth } from "@clerk/nextjs/server";
 import { Users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export async function POST(req: NextRequest) {
+export async function POST() {
   const { userId } = await auth();
 
   if (!userId) {

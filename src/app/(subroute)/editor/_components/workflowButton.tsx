@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import { IconLockAccess } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { useFlowStore } from "../_constants/reactFlowStore";
@@ -40,6 +40,7 @@ const WorkflowButton: FC<WorkflowButtonProps> = ({
         break;
       case "Trello":
         toast({ title: "Coming Soon!" });
+        break;
       default:
         break;
     }

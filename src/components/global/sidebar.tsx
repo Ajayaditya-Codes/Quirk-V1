@@ -17,9 +17,7 @@ import {
   LucideMousePointerClick,
 } from "lucide-react";
 
-type Props = {};
-
-const MenuOptions = (props: Props) => {
+const MenuOptions = () => {
   const menuOptions = [
     { name: "Dashboard", href: "/workflows" },
     { name: "Settings", href: "/settings" },

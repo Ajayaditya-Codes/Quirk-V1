@@ -1,3 +1,4 @@
+import React from "react";
 import { db } from "@/db/drizzle";
 import { Logs } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
@@ -10,11 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  IconCircle,
-  IconCircleCheck,
-  IconExclamationCircle,
-} from "@tabler/icons-react";
+import { IconCircleCheck, IconExclamationCircle } from "@tabler/icons-react";
 
 export default async function Page() {
   const { userId } = await auth();

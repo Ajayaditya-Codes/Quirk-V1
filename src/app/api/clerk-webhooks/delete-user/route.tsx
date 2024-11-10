@@ -55,25 +55,24 @@ export async function POST(req: Request) {
         .where(eq(Users.ClerkID, evt.data.id))
         .execute();
 
-      for (const workflow of user[0].Workflows) {
-        const existing = await db
-          .select()
-          .from(Workflows)
-          .where(eq(Workflows.WorkflowName, workflow))
-          .execute();
-        if (existing.length === 0) {
-          continue;
-        }
-        if (existing[0].HookID) {
-          type github = {
-            repoName: string;
-            listennerType: string;
-          };
-          const github: github = existing[0].GitHubNode as github;
-          try {
-            const response = await fetch(
-              "https://localhost:3000/api/github/webhooks/delete",
-              {
+      if (user[0].Workflows) {
+        for (const workflow of user[0].Workflows) {
+          const existing = await db
+            .select()
+            .from(Workflows)
+            .where(eq(Workflows.WorkflowName, workflow))
+            .execute();
+          if (existing.length === 0) {
+            continue;
+          }
+          if (existing[0].HookID) {
+            type github = {
+              repoName: string;
+              listennerType: string;
+            };
+            const github: github = existing[0].GitHubNode as github;
+            try {
+              await fetch("https://localhost:3000/api/github/webhooks/delete", {
                 method: "DELETE",
                 headers: {
                   "Content-Type": "application/json",
@@ -83,15 +82,20 @@ export async function POST(req: Request) {
                   hookId: existing[0].HookID,
                   id: evt.data.id,
                 }),
-              }
-            );
-          } catch (error) {}
+              });
+            } catch (error) {
+              return;
+            }
+          }
+          await db
+            .delete(Workflows)
+            .where(eq(Workflows.WorkflowName, workflow))
+            .execute();
+          await db
+            .delete(Logs)
+            .where(eq(Logs.WorkflowName, workflow))
+            .execute();
         }
-        await db
-          .delete(Workflows)
-          .where(eq(Workflows.WorkflowName, workflow))
-          .execute();
-        await db.delete(Logs).where(eq(Logs.WorkflowName, workflow)).execute();
       }
 
       await db.delete(Users).where(eq(Users.ClerkID, evt.data.id)).execute();

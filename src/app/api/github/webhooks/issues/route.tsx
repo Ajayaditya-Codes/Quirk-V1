@@ -28,7 +28,7 @@ export async function POST(req: Request) {
   }
 
   // Parse the request body to get the repository name
-  const { repo, workflow } = await req.json();
+  const { repo } = await req.json();
   if (!repo) {
     return NextResponse.json(
       { message: "Repository name is required" },

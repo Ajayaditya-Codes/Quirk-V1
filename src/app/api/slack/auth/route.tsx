@@ -4,10 +4,9 @@ import { auth } from "@clerk/nextjs/server";
 import { Users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const code = searchParams.get("code");
-  const state = searchParams.get("state");
 
   if (!code) {
     return NextResponse.json(

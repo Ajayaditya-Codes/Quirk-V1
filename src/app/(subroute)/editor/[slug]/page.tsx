@@ -1,7 +1,8 @@
 import Editor from "../_components/editor";
 import Menu from "../_components/menu";
+import React from "react";
 
-export default async function Page() {
+export default function Page() {
   return (
     <div className="w-full h-[85vh] py-auto flex flex-row space-x-5">
       <Editor />

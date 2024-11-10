@@ -1,3 +1,4 @@
+import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import VariableButton from "./variableButton";
 import { GithubVariables } from "../_constants/githubVariables";

@@ -42,8 +42,6 @@ const ConnectionCard = ({
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to disconnect");
       }
-
-      const data = await response.json();
     } catch (error) {
       err = true;
     } finally {

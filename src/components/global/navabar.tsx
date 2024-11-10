@@ -2,9 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-type Props = {};
-
-const Navbar = async (props: Props) => {
+const Navbar = () => {
   return (
     <header className="fixed right-0 left-0 top-0 p-7 bg-black  z-[100] flex items-center justify-between">
       <aside className="flex items-center gap-[2px] text-white">

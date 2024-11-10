@@ -6,6 +6,7 @@ import {
 } from "@tabler/icons-react";
 import { ReactNode } from "react";
 import { GitBranch } from "lucide-react";
+import React from "react";
 
 type Workflow = {
   name: string;

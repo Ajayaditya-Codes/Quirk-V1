@@ -47,14 +47,11 @@ export async function DELETE(req: Request) {
     auth: accessToken,
   });
   try {
-    const response = await octokit.request(
-      "DELETE /repos/{owner}/{repo}/hooks/{hook_id}",
-      {
-        owner: owner || "",
-        repo: slug,
-        hook_id: parseInt(hookId),
-      }
-    );
+    await octokit.request("DELETE /repos/{owner}/{repo}/hooks/{hook_id}", {
+      owner: owner || "",
+      repo: slug,
+      hook_id: parseInt(hookId),
+    });
 
     return NextResponse.json({
       message: "Webhook deleted successfully",

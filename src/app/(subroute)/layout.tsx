@@ -3,6 +3,7 @@ import { db } from "@/db/drizzle";
 import { Users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
+import React from "react";
 
 type Props = { children: React.ReactNode };
 

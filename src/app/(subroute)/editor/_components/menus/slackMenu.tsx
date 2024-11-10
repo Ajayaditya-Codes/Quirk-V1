@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { IconArrowBackUpDouble, IconInfoCircle } from "@tabler/icons-react";
 import { useMenuStore } from "../../_constants/menuStateStore";
 import { useState, useEffect } from "react";

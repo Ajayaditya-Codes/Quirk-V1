@@ -52,14 +52,14 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const exisitngWorkflow = await db
+  const existingWorkflow = await db
     .select()
     .from(Workflows)
     .where(eq(Workflows.WorkflowName, workflow))
     .execute();
 
-  if (exisitngWorkflow.length === 0) {
-    return { status: 404, body: { error: "Workflow Not Found" } };
+  if (existingWorkflow.length === 0) {
+    return NextResponse.json({ error: "Workflow Not Found" }, { status: 404 });
   }
 
   try {
@@ -72,8 +72,8 @@ export async function POST(req: NextRequest) {
       .insert(Workflows)
       .values({
         WorkflowName: newWorkflow,
-        Nodes: exisitngWorkflow[0].Nodes,
-        Edges: exisitngWorkflow[0].Edges,
+        Nodes: existingWorkflow[0].Nodes,
+        Edges: existingWorkflow[0].Edges,
         GitHubNode: {
           id: "github-1",
           type: "github",
@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
             repoName: "",
             listenerType: "issues",
           },
-          position: { x: 0, y: 0 }, // Position of the GitHub node
+          position: { x: 0, y: 0 },
         },
         Published: false,
         HookID: null,
@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
       })
       .execute();
     return NextResponse.json(
-      { message: `Failed to duplicate Workflow ${workflow}` },
+      { error: `Failed to duplicate Workflow ${workflow}` },
       { status: 400 }
     );
   }

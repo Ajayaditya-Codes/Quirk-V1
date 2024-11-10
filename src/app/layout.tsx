@@ -5,6 +5,7 @@ import { dark } from "@clerk/themes";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/lib/theme-provider";
 import Image from "next/image";
+import React from "react";
 
 export const metadata: Metadata = {
   title: "Quirk",

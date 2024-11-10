@@ -3,6 +3,7 @@ import { useToast } from "@/hooks/use-toast";
 import { IconCodePlus } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { generate } from "random-words";
+import React from "react";
 
 type Props = {
   bgDisabled: boolean;
