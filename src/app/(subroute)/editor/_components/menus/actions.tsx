@@ -100,7 +100,7 @@ export default function Actions() {
           workflowName: slug,
           nodes: nodes,
           edges: edges,
-          githubData: nodes[0],
+          githubData: nodes[0].data,
           publish: publish,
         }),
       });

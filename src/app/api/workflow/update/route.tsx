@@ -39,15 +39,14 @@ export async function POST(req: NextRequest) {
     }
 
     type GithubData = { repoName: string; listenerType: string };
-    type GithubNode = { data: GithubData };
 
-    const oldGitHubData: GithubNode = existingWorkflow[0]
-      .GitHubNode as GithubNode;
+    const oldGitHubData: GithubData = existingWorkflow[0]
+      .GitHubNode as GithubData;
 
     // Check if GitHub data has been modified
     const githubDataChanged =
-      oldGitHubData.data.repoName !== githubData.data.repoName ||
-      oldGitHubData.data.listenerType !== githubData.data.listenerType;
+      oldGitHubData.repoName !== githubData.repoName ||
+      oldGitHubData.listenerType !== githubData.listenerType;
     const { userId, getToken } = await getAuth(req); // Automatically retrieves session context
 
     if (!userId) {
@@ -76,7 +75,7 @@ export async function POST(req: NextRequest) {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              repo: oldGitHubData.data.repoName,
+              repo: oldGitHubData.repoName,
               hookId: existingWorkflow[0].HookID,
             }),
           }
@@ -104,7 +103,7 @@ export async function POST(req: NextRequest) {
     }
     if (
       (githubDataChanged || existingWorkflow[0].HookID === null) &&
-      githubData.data.listenerType === "issues"
+      githubData.listenerType === "issues"
     ) {
       try {
         const response = await fetch(
@@ -116,7 +115,7 @@ export async function POST(req: NextRequest) {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              repo: githubData.data.repoName,
+              repo: githubData.repoName,
               workflow: workflowName,
             }),
           }
@@ -125,14 +124,14 @@ export async function POST(req: NextRequest) {
 
         if (!response.ok) {
           await db.insert(Logs).values({
-            LogMessage: `Failed to Create Webhook on ${githubData.data.repoName}`,
+            LogMessage: `Failed to Create Webhook on ${githubData.repoName}`,
             WorkflowName: workflowName,
             Success: false,
           });
         }
 
         await db.insert(Logs).values({
-          LogMessage: `Created Webhook on ${githubData.data.repoName}`,
+          LogMessage: `Created Webhook on ${githubData.repoName}`,
           WorkflowName: workflowName,
           Success: true,
         });
@@ -145,7 +144,7 @@ export async function POST(req: NextRequest) {
           .execute();
       } catch (error) {
         await db.insert(Logs).values({
-          LogMessage: `Failed to Create Webhook on ${githubData.data.repoName}`,
+          LogMessage: `Failed to Create Webhook on ${githubData.repoName}`,
           WorkflowName: workflowName,
           Success: false,
         });
@@ -153,7 +152,7 @@ export async function POST(req: NextRequest) {
     }
     if (
       (githubDataChanged || existingWorkflow[0].HookID === null) &&
-      githubData.data.listenerType === "push"
+      githubData.listenerType === "push"
     ) {
       try {
         const response = await fetch(
@@ -165,7 +164,7 @@ export async function POST(req: NextRequest) {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              repo: githubData.data.repoName,
+              repo: githubData.repoName,
               workflow: workflowName,
             }),
           }
@@ -173,14 +172,14 @@ export async function POST(req: NextRequest) {
         const { hook_id } = await response.json();
         if (!response.ok) {
           await db.insert(Logs).values({
-            LogMessage: `Failed to Create Webhook on ${githubData.data.repoName}`,
+            LogMessage: `Failed to Create Webhook on ${githubData.repoName}`,
             WorkflowName: workflowName,
             Success: false,
           });
         }
 
         await db.insert(Logs).values({
-          LogMessage: `Created Webhook on ${githubData.data.repoName}`,
+          LogMessage: `Created Webhook on ${githubData.repoName}`,
           WorkflowName: workflowName,
           Success: true,
         });
@@ -193,7 +192,7 @@ export async function POST(req: NextRequest) {
           .execute();
       } catch (error) {
         await db.insert(Logs).values({
-          LogMessage: `Failed to Create Webhook on ${githubData.data.repoName}`,
+          LogMessage: `Failed to Create Webhook on ${githubData.repoName}`,
           WorkflowName: workflowName,
           Success: false,
         });

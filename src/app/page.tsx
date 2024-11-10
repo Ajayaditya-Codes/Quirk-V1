@@ -27,7 +27,7 @@ export default function Home() {
               </HoverBorderGradient>
               <h1 className="text-xl md:text-4xl lg:text-6xl font-semibold mx-auto text-center mt-6 relative z-20 py-6 bg-clip-text text-transparent bg-gradient-to-b from-gray-100 via-gray-200 to-gray-300 leading-loose ">
                 Automate Your GitHub Workflow <br /> at{" "}
-                <Cover>warp speed</Cover>
+                <Cover>Warp Speed</Cover>
               </h1>
             </div>
           }

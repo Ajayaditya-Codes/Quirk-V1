@@ -3,7 +3,7 @@ import { IconArrowBackUpDouble, IconInfoCircle } from "@tabler/icons-react";
 import { useMenuStore } from "../../_constants/menuStateStore";
 import { useState, useEffect } from "react";
 import { useFlowStore } from "../../_constants/reactFlowStore";
-import {  useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import {
   Select,
   SelectTrigger,
@@ -156,11 +156,7 @@ export default function SlackMenu() {
           <span className="bg-neutral-900 font-semibold tracking-wider px-2 py-0 rounded-xl ">
             var::
           </span>
-          <p>to use variables and</p>{" "}
-          <span className="bg-neutral-900 font-semibold tracking-wider px-2 py-0 rounded-xl ">
-            ` `
-          </span>
-          <p> to escape</p>
+          <p>to use variables </p>
         </small>
         <button
           className="w-full p-2 rounded-lg border border-white text-xl font-semibold h-fit"

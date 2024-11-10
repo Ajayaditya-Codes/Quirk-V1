@@ -63,9 +63,8 @@ export async function DELETE(req: NextRequest) {
       .execute();
 
     type GithubData = { repoName: string; listenerType: string };
-    type GithubNode = { data: GithubData };
 
-    const GithubData: GithubNode = existingWorkflow[0].GitHubNode as GithubNode;
+    const GithubData: GithubData = existingWorkflow[0].GitHubNode as GithubData;
 
     if (existingWorkflow.length === 0) {
       return NextResponse.json(
@@ -98,7 +97,7 @@ export async function DELETE(req: NextRequest) {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              repo: GithubData.data.repoName,
+              repo: GithubData.repoName,
               hookId: existingWorkflow[0].HookID,
             }),
           }

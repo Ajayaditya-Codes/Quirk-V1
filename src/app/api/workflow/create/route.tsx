@@ -64,13 +64,8 @@ export async function POST(req: NextRequest) {
       .values({
         WorkflowName: newWorkflowName,
         GitHubNode: {
-          id: "github-1",
-          type: "github",
-          data: {
-            repoName: "",
-            listenerType: "issues",
-          },
-          position: { x: 0, y: 0 }, // Position of the GitHub node
+          repoName: "",
+          listenerType: "issues",
         },
         Nodes: [
           {
