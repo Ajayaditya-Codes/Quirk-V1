@@ -109,9 +109,29 @@ export default function Editor() {
   useEffect(() => {
     const fetchWorkflow = async () => {
       try {
-        const response = await fetch(`/api/workflow/get?workflowName=${slug}`);
+        const response = await fetch(`/api/workflow/get?workflowName=${slug}`, {
+          method: "GET",
+          credentials: "include",
+        });
         if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
+          const errorData = await response.json();
+          console.log(errorData.error === "User not found");
+          if (errorData.error === "User not found") {
+            toast({
+              title: "Please log in and try again.",
+              variant: "destructive",
+            });
+          } else if (
+            errorData.error === "Unauthorized to Access the Workflow"
+          ) {
+            toast({
+              title: "You are not authorized to access this workflow.",
+              variant: "destructive",
+            });
+          } else {
+            toast({ title: "There was Some Error", variant: "destructive" });
+          }
+          return;
         }
         const data = await response.json();
         setNodes(data.Nodes);

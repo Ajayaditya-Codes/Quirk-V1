@@ -1,10 +1,12 @@
 // src/app/api/workflow/fetch/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/drizzle";
-import { Workflows } from "@/db/schema";
+import { Users, Workflows } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { auth } from "@clerk/nextjs/server";
 
 export async function GET(req: NextRequest) {
+  const { userId } = await auth();
   const { searchParams } = new URL(req.url);
   const workflowName = searchParams.get("workflowName");
 
@@ -16,6 +18,23 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    const user =
+      userId &&
+      (await db
+        .select()
+        .from(Users)
+        .where(eq(Users.ClerkID, userId))
+        .execute());
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+    if (!user[0].Workflows.includes(workflowName)) {
+      return NextResponse.json(
+        { error: "Unauthorized to Access the Workflow" },
+        { status: 404 }
+      );
+    }
     const result = await db
       .select()
       .from(Workflows)
