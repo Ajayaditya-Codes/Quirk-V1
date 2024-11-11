@@ -1,6 +1,6 @@
 import React from "react";
 import { db } from "@/db/drizzle";
-import { Logs } from "@/db/schema";
+import { Logs, Users } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import {
   Table,
@@ -12,14 +12,34 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { IconCircleCheck, IconExclamationCircle } from "@tabler/icons-react";
+import { eq, inArray } from "drizzle-orm";
 
 export default async function Page() {
   const { userId } = await auth();
   let logs = null;
   try {
-    const result = userId && (await db.select().from(Logs).execute());
-
-    logs = result;
+    const user =
+      userId &&
+      (await db
+        .select()
+        .from(Users)
+        .where(eq(Users.ClerkID, userId))
+        .execute());
+    if (user) {
+      logs = await db
+        .select()
+        .from(Logs)
+        .where(inArray(Logs.WorkflowName, user[0].Workflows))
+        .execute();
+    }
+    if (logs && logs.length > 30) {
+      for (const log of logs) {
+        await db
+          .delete(Logs)
+          .where(eq(Logs.createdAt, log.createdAt))
+          .execute();
+      }
+    }
   } catch (error) {
     console.error("Error fetching logs:", error);
   }
