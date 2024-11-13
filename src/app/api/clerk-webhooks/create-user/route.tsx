@@ -4,7 +4,7 @@ import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { db } from "@/db/drizzle";
-import { Users } from "@/db/schema";
+import { Logs, Users } from "@/db/schema";
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CREATE_USER_WEBHOOK_SECRET;
@@ -46,23 +46,26 @@ export async function POST(req: Request) {
     });
   }
 
-  const addUser = async (ClerkID: string, Username: string, Email: string) => {
+  try {
     await db
       .insert(Users)
       .values({
-        ClerkID: ClerkID,
-        Username: Username,
-        Email: Email,
+        ClerkID: payload.data.id,
+        Username: payload.data.username,
+        Email: payload.data.email_addresses[0].email_address,
         Credits: 20,
       })
       .execute();
-  };
-
-  addUser(
-    payload.data.id,
-    payload.data.username,
-    payload.data.email_addresses[0].email_address
-  );
+  } catch (error: any) {
+    await db
+      .insert(Logs)
+      .values({
+        LogMessage: JSON.stringify(error),
+        Success: false,
+        WorkflowName: "Not Created",
+      })
+      .execute();
+  }
 
   return new Response("", { status: 200 });
 }
